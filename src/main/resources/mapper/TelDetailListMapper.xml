@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.contact.TelDetailListMapper">
+    <!-- 批量修改字段类容为经过编码后的格式 -->
+    <update id="batchUpdate" parameterType="list">
+        <foreach collection="list" separator=";" item="item">
+            update tel_detail_list SET
+            label = #{item.label},
+            content = #{item.content}
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+    <insert id="insertOne" keyProperty="id" useGeneratedKeys="true" parameterType="com.csxx.dao.contact.mybatisModel.TelDetailList">
+        INSERT INTO tel_detail_list(user_id,category,label,content) VALUES(#{user_id},#{category},#{label},#{content})
+    </insert>
+</mapper>

@@ -1,0 +1,32 @@
+server:
+  port: 8088
+
+spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;DatabaseName=FreeHost
+    username: FreeHost
+    password: abcd1234@
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
+
+code: D8FIs5mz9spSTF7R
+
+web:
+  upload-path: E:/JavaResources/
+
+web-contact:
+  domain: onenet.com.tw
+  expireTime: 3600
+  requestTokenSign: m3q0e1y6p1x3pbv3n8sqo00p7a54o0nj
+  tokenValidPage: https://passport.dianchat.net/pass/validate_token
+  loginPage: http://onenet.com.tw:8091/contactWeb/#/login
+  logoutPage: https://passport.dianchat.net/pass/logout?callback=https://passport.dianchat.net/pass/service_login?callback=http://onenet.com.tw:8090/im/webOrg/login
+  webContactPage: https://onenet.com.tw:8088/im/webContatcs/api/list?
+  webContactDelPage: http://onenet.com.tw:8088/im/webContatcs/api/get_delete_list?

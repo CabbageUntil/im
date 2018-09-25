@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.webOrg.AbOrgAgendaMapper" >
+  <resultMap id="BaseResultMap" type="com.csxx.dao.webOrg.AbOrgAgenda" >
+    <constructor >
+      <idArg column="agenda_id" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="year" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="month" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="day" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="org_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="dept_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="member_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="note1" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="note2" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="note3" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="arrange_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="dept_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="member_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="org_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <resultMap id="AbOrgAgendaMap" type="com.csxx.dao.webOrg.AbOrgAgenda">
+    <id property="agendaId" column="agenda_id" />
+    <result property="year" column="year" />
+    <result property="month" column="month" />
+    <result property="day" column="day" />
+    <result property="memberId" column="member_id" />
+    <result property="note1" column="note1" />
+    <result property="note2" column="note2" />
+    <result property="note3" column="note3" />
+    <result property="arrange_date" column="arrange_date" />
+    <result property="memberName" column="member_name" />
+    <result property="deptId" column="dept_id" />
+    <result property="deptName" column="dept_name" />
+    <result property="orgName" column="org_name" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    agenda_id, year, month, day, org_id, member_id, note1, note2, note3,arrange_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ab_org_agenda_tab
+    where agenda_id = #{agendaId,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ab_org_agenda_tab
+    where agenda_id = #{agendaId,jdbcType=NVARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.csxx.dao.webOrg.AbOrgAgenda" >
+    insert into ab_org_agenda_tab (agenda_id, year, month, 
+      day, org_id, member_id,dept_id,
+      note1, note2, note3
+      )
+    values (#{agendaId,jdbcType=NVARCHAR}, #{year,jdbcType=INTEGER}, #{month,jdbcType=TINYINT}, 
+      #{day,jdbcType=TINYINT}, #{orgId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER},#{deptId,jdbcType=INTEGER},
+      #{note1,jdbcType=NVARCHAR}, #{note2,jdbcType=NVARCHAR}, #{note3,jdbcType=NVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.csxx.dao.webOrg.AbOrgAgenda" >
+    insert into ab_org_agenda_tab
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="agendaId != null" >
+        agenda_id,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="day != null" >
+        day,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="deptId != null" >
+        dept_id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="note1 != null" >
+        note1,
+      </if>
+      <if test="note2 != null" >
+        note2,
+      </if>
+      <if test="note3 != null" >
+        note3,
+      </if>
+      <if test="arrange_date != null">
+        arrange_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="agendaId != null" >
+        #{agendaId,jdbcType=NVARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=INTEGER},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=TINYINT},
+      </if>
+      <if test="day != null" >
+        #{day,jdbcType=TINYINT},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="note1 != null" >
+        #{note1,jdbcType=NVARCHAR},
+      </if>
+      <if test="note2 != null" >
+        #{note2,jdbcType=NVARCHAR},
+      </if>
+      <if test="note3 != null" >
+        #{note3,jdbcType=NVARCHAR},
+      </if>
+      <if test="arrange_date != null">
+        #{arrange_date,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbOrgAgenda" >
+    update ab_org_agenda_tab
+    <set >
+      <if test="year != null" >
+        year = #{year,jdbcType=INTEGER},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=TINYINT},
+      </if>
+      <if test="day != null" >
+        day = #{day,jdbcType=TINYINT},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null" >
+        dept_id = #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="note1 != null" >
+        note1 = #{note1,jdbcType=NVARCHAR},
+      </if>
+      <if test="note2 != null" >
+        note2 = #{note2,jdbcType=NVARCHAR},
+      </if>
+      <if test="note3 != null" >
+        note3 = #{note3,jdbcType=NVARCHAR},
+      </if>
+      <if test="arrange_date != null">
+        arrange_date = #{arrange_date,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where agenda_id = #{agendaId,jdbcType=NVARCHAR}
+  </update>
+
+
+
+  <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbOrgAgenda" >
+    update ab_org_agenda_tab
+    set year = #{year,jdbcType=INTEGER},
+      month = #{month,jdbcType=TINYINT},
+      day = #{day,jdbcType=TINYINT},
+      org_id = #{orgId,jdbcType=INTEGER},
+      member_id = #{memberId,jdbcType=INTEGER},
+      note1 = #{note1,jdbcType=NVARCHAR},
+      note2 = #{note2,jdbcType=NVARCHAR},
+      note3 = #{note3,jdbcType=NVARCHAR},
+      arrange_date = #{arrange_date,jdbcType=TIMESTAMP}
+    where agenda_id = #{agendaId,jdbcType=NVARCHAR}
+  </update>
+  <!--按年份查询日程-->
+  <select id="selectByYear" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+
+    SELECT  meb.member_name, org.org_name,apt.dept_name, aoa.*
+    FROM ab_org_agenda_tab aoa
+    INNER JOIN ab_member_tab meb
+    ON aoa.member_id = meb.member_id
+    INNER  JOIN ab_org_tab org
+    ON aoa.org_id = org.org_id
+    INNER  JOIN ab_dept_tab apt
+	ON  apt.dept_id = aoa.dept_id
+    WHERE year  = #{year,jdbcType=TINYINT}
+
+
+  </select>
+  <!--按年月查询日程-->
+  <select id="selectByMonth" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+
+    SELECT  meb.member_name, org.org_name,apt.dept_name, aoa.*
+    FROM ab_org_agenda_tab aoa
+    INNER JOIN ab_member_tab meb
+    ON aoa.member_id = meb.member_id
+    INNER  JOIN ab_org_tab org
+    ON aoa.org_id = org.org_id
+    INNER  JOIN ab_dept_tab apt
+	ON  apt.dept_id = aoa.dept_id
+    WHERE month  = #{month,jdbcType=TINYINT}
+    and year  = #{year,jdbcType=TINYINT}
+
+  </select>
+
+
+  <!--查询制定天的日程 -->
+  <select id="selectByDay" resultMap="AbOrgAgendaMap" parameterType="java.lang.Integer" >
+
+    SELECT  meb.member_name, org.org_name,apt.dept_name, aoa.*
+    FROM ab_org_agenda_tab aoa
+    INNER JOIN ab_member_tab meb
+    ON aoa.member_id = meb.member_id
+    INNER  JOIN ab_org_tab org
+    ON aoa.org_id = org.org_id
+    INNER  JOIN ab_dept_tab apt
+	ON  apt.dept_id = aoa.dept_id
+    WHERE day = #{day,jdbcType=TINYINT}
+    and  month  = #{month,jdbcType=TINYINT}
+    and year  = #{year,jdbcType=TINYINT}
+  </select>
+
+
+   <!-- 查询公司的日程信息： 参数：部门，员工，时间-->
+  <select id="abOrgAgendaList" resultMap="AbOrgAgendaMap" parameterType="com.csxx.dao.webOrg.AbOrgAgenda" >
+    SELECT  meb.member_name, org.org_name,apt.dept_name, aoa.*
+    FROM ab_org_agenda_tab aoa
+    INNER JOIN ab_member_tab meb
+    ON aoa.member_id = meb.member_id
+    INNER  JOIN ab_org_tab org
+    ON aoa.org_id = org.org_id
+    INNER  JOIN ab_dept_tab apt
+		ON  apt.dept_id = aoa.dept_id
+   WHERE
+    /*更具公司分类*/
+    aoa.org_id = #{orgId,jdbcType=INTEGER}
+     /* 员工姓名*/
+    <if test="memberName != null" >
+      and  meb.member_name  LIKE  '%'+ #{memberName ,jdbcType=NVARCHAR} + '%'
+    </if>
+    /* 部门编号*/
+    <if test="deptId != null" >
+      and aoa.dept_id = #{deptId,jdbcType=NVARCHAR}
+    </if>
+    <if test="startDate!=null and endDate!=null">
+     and  aoa.arrange_date between   #{startDate} AND  #{endDate}
+    </if>
+  </select>
+
+  <!--实现公司日程的批量删除-->
+  <delete id="deleteOrgAgenda" parameterType="java.lang.Long"  >
+    delete from ab_org_agenda_tab  where agenda_id in
+    <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+  
+  <delete id="deleteOrgAgendaByOne" parameterType="java.lang.String">
+      delete from ab_org_agenda_tab  where agenda_id = #{agendaId,jdbcType=NVARCHAR}
+  </delete>
+  
+</mapper>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.webOrg.AbDeptMapper" >
+  <resultMap id="BaseResultMap" type="com.csxx.dao.webOrg.AbDept" >
+    <constructor >
+      <idArg column="dept_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="org_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="dept_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="dept_status" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="dept_remove_datetime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="dept_create_datetime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <resultMap id="AllMemberMap" type="com.csxx.dao.webOrg.AbDept">
+    <id property="deptId" column="dept_id" />
+    <result property="orgId" column="org_id" />
+    <result property="deptName" column="dept_name" />
+    <result property="parentId" column="parent_id" />
+    <result property="deptRemoveDatetime" column="dept_remove_datetime" />
+    <result property="deptCreateDatetime" column="dept_create_datetime" />
+    <result property="deptStatus" column="dept_status" />
+     <!--2018年7月31日11:54:51 parent_name-->
+    <result property="parentName" column="parent_name" />
+  </resultMap>
+  <resultMap id="selectList" type="com.csxx.utils.deptList">
+    <id property="deptId" column="dept_id" />
+    <result property="deptName" column="dept_name" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dept_id, org_id, dept_name, parent_id,dept_remove_datetime,dept_status,dept_create_datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ab_dept_tab
+    where dept_id = #{deptId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ab_dept_tab
+    where dept_id = #{deptId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.csxx.dao.webOrg.AbDept" >
+    insert into ab_dept_tab (dept_id, org_id, dept_name, 
+      parent_id)
+    values (#{deptId,jdbcType=INTEGER}, #{orgId,jdbcType=INTEGER}, #{deptName,jdbcType=NVARCHAR}, 
+      #{parentId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.csxx.dao.webOrg.AbDept" >
+    insert into ab_dept_tab
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deptId != null" >
+        dept_id,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="deptName != null" >
+        dept_name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="deptStatus != null" >
+        dept_status,
+      </if>
+      <if test="deptCreateDatetime != null" >
+        dept_create_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deptId != null" >
+        #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="deptName != null" >
+        #{deptName,jdbcType=NVARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="deptStatus != null" >
+        #{deptStatus,jdbcType=NVARCHAR},
+      </if>
+      <if test="deptCreateDatetime != null" >
+        #{deptCreateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbDept" >
+    update ab_dept_tab
+    <set >
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="deptName != null" >
+        dept_name = #{deptName,jdbcType=NVARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="deptRemoveDatetime != null" >
+        dept_remove_datetime = #{deptRemoveDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deptStatus != null" >
+        dept_status = #{deptStatus,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where dept_id = #{deptId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbDept" >
+    update ab_dept_tab
+    set org_id = #{orgId,jdbcType=INTEGER},
+      dept_name = #{deptName,jdbcType=NVARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER}
+    where dept_id = #{deptId,jdbcType=INTEGER}
+  </update>
+  <!--参数orgId(公司编号)  dept_status(部门状态)  deptName(部门名称)-->
+  <!--2018年7月30日11:00:20 -->
+  <select id="selectByNameAndStatus" resultMap="AllMemberMap" >
+    SELECT
+    tb.dept_name parent_name,ab.dept_id, ab.org_id, ab.dept_name, ab.parent_id,ab.dept_remove_datetime,ab.dept_status,ab.dept_create_datetime
+    from ab_dept_tab tb
+    INNER JOIN ab_dept_tab ab
+    ON tb.dept_id = ab.parent_id
+    where
+    ab.org_id = #{orgId,jdbcType=INTEGER}
+    and  ab.dept_status =  #{status,jdbcType=INTEGER}
+    <if test="deptName!=null and  deptName!=''">
+        and  ab.dept_name LIKE  '%'+#{deptName ,jdbcType=NVARCHAR}+'%'
+    </if>
+  </select>
+  <!--查询部门信息-->
+  <!--参数orgId(公司编号)  dept_status(部门状态)  deptName(部门名称)-->
+  <!--2018年9月17日16:21:38-->
+  <select id="selectByNameAndOrgId" resultMap="AllMemberMap" >
+    SELECT
+    tb.dept_name parent_name,ab.dept_id, ab.org_id, ab.dept_name, ab.parent_id,ab.dept_remove_datetime,ab.dept_status,ab.dept_create_datetime
+    from ab_dept_tab tb
+    INNER JOIN ab_dept_tab ab
+    ON tb.dept_id = ab.parent_id
+    where
+    ab.org_id = #{orgId,jdbcType=INTEGER}
+    <if test="deptName!=null and  deptName!=''">
+      and  ab.dept_name LIKE  '%'+#{deptName ,jdbcType=NVARCHAR}+'%'
+    </if>
+  </select>
+
+  <!--查询部门的名称和部门的编号(参数：公司编号)-->
+  <select id="selectDeptByOrgId" resultMap="selectList" >
+    SELECT dept_id,dept_name
+    FROM ab_dept_tab
+    WHERE
+    dept_status = 1
+    AND
+    org_id = #{orgId,jdbcType=INTEGER}
+  </select>
+
+
+</mapper>

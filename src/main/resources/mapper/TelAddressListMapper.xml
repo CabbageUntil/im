@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.contact.TelAddressListMapper" >
+
+    <sql id="addressColumns">
+        ${t1}.id detailId,${t1}.category,ISNULL(${t1}.label,'') label,ISNULL(${t1}.remark,'') remark,
+        ${t1}.address_id,ISNULL(${t2}.iso_country_code,'') iso_country_code,ISNULL(${t2}.country,'') country,
+        ISNULL(${t2}.state,'') state,ISNULL(${t2}.city,'') city,ISNULL(${t2}.sub_administrative_area,'') sub_administrative_area,
+        ISNULL(${t2}.sub_locality,'') sub_locality,ISNULL(${t2}.street,'') street,ISNULL(${t2}.postal_code,'') postal_code
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.csxx.bo.contact.WebContactCatAndAddress">
+        <id column="detailId" property="detailId" jdbcType="INTEGER" />
+        <id column="category" property="category" jdbcType="VARCHAR" />
+        <id column="label" property="label" jdbcType="VARCHAR" />
+        <id column="remark" property="remark" jdbcType="VARCHAR" />
+        <id column="address_id" property="addressId" jdbcType="INTEGER" />
+        <id column="iso_country_code" property="countryCode" jdbcType="VARCHAR" />
+        <id column="country" property="country" jdbcType="VARCHAR" />
+        <id column="state" property="state" jdbcType="VARCHAR" />
+        <id column="city" property="city" jdbcType="VARCHAR" />
+        <id column="sub_administrative_area" property="admin" jdbcType="VARCHAR" />
+        <id column="sub_locality" property="locality" jdbcType="VARCHAR" />
+        <id column="street" property="street" jdbcType="VARCHAR" />
+        <id column="postal_code" property="postcode" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="selectByAddressId" resultMap="BaseResultMap">
+        select
+        <include refid="addressColumns">
+            <property name="t1" value="tdl"/>
+            <property name="t2" value="tal"/>
+        </include>
+        from tel_detail_list tdl, tel_address_list tal
+        where tdl.address_id = tal.id
+        and tal.id in
+        <foreach item="item" index="index" collection="list"
+            open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 批量修改字段类容为经过编码后的格式 -->
+    <update id="batchUpdate" parameterType="list">
+        <foreach collection="list" separator=";" item="item">
+            update tel_address_list SET
+            city = #{item.city},
+            country = #{item.country},
+            state = #{item.state},
+            sub_administrative_area = #{item.sub_administrative_area},
+            sub_locality = #{item.sub_locality},
+            postal_code = #{item.postal_code},
+            street = #{item.street}
+            where id = #{item.id}
+        </foreach>
+    </update>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.contact.TelUserListMapper">
+    <resultMap id="userMaps" type="com.csxx.vo.contacts.UserWithPhoneList">
+        <id column="id" />
+        <result column="pretty_name" property="prettyName" />
+        <result column="raw_name" property="rawName" />
+        <collection property="phoneList" ofType="string">
+            <constructor>
+                <arg column="mobile" />
+            </constructor>
+        </collection>
+    </resultMap>
+    
+    <select id="getUser" parameterType="java.lang.Integer" resultMap="userMaps">
+        SELECT tul.id,
+                tul.first_name+' '+tul.last_name pretty_name,
+                tul.first_name+tul.last_name raw_name,
+                content mobile
+        FROM Tel_User_List tul
+        LEFT JOIN Tel_Detail_List tdl
+        ON tul.id = tdl.user_id
+        WHERE (tdl.category = 'mobile' OR tdl.category IS NULL)
+        AND ((tul.status IS NULL) OR (tul.status = 0))
+        AND owner_id = #{owner_id, jdbcType=INTEGER}
+    </select>
+
+    <insert id="insertOne" keyProperty="id" useGeneratedKeys="true" parameterType="com.csxx.dao.contact.mybatisModel.TelUserList">
+        INSERT INTO tel_user_list(owner_id,first_name,last_name,status) VALUES(#{ownerId},#{firstName},#{lastName},#{status})
+    </insert>
+</mapper>

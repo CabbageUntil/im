@@ -1,0 +1,62 @@
+server:
+  port: 8088
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://110.165.41.37:1433;DatabaseName=freehost
+    username: user_freehost
+    password: abcd1234@
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
+
+logging:
+  level:
+    com.csxx.mapper: trace
+
+# 通讯录同步密钥
+code: D8FIs5mz9spSTF7R
+
+# JWT-TOKEN
+jwt-token: mMma*Pzn4X#P8n%I
+
+# 文件上传地址（暂时没用）
+web:
+  upload-path: E:/JavaResources/
+
+# 公共配置
+common:
+  requestTokenSign: m3q0e1y6p1x3pbv3n8sqo00p7a54o0nj
+  tokenValidPage: https://passport.dianchat.net/pass/validate_token
+
+# 网页通讯录配置
+web-contact:
+  domain: localhost
+  expireTime: 86400
+  loginPage: http://localhost:8091/contactWeb/#/login
+  logoutPage: https://passport.dianchat.net/pass/logout?callback=https://passport.dianchat.net/pass/service_login?callback=http://localhost:8090/im/webOrg/login
+  webContactPage: http://localhost:8088/im/webContatcs/api/list?
+  webContactDelPage: http://localhost:8088/im/webContatcs/api/get_delete_list?
+
+# 企业管理配置
+web-org:
+  domain: localhost
+  expireTime: 86400
+  loginPage: http://localhost:8092/#/login
+  logoutPage: https://passport.dianchat.net/pass/logout?callback=https://passport.dianchat.net/pass/service_login?callback=http://localhost:8092/#/login
+  joinComPage: http://localhost:8088/org/joinComList?
+  otherComPage: http://localhost:8088/org/otherComList?
+  ownComPage: http://localhost:8088/org/ownComList?
+  findMemberConfig: http://localhost:8088/org/findMember?
+  allDeptConfig: http://localhost:8088/org/allDeptMent?
+  findOrgAgendaByYearConfig: http://localhost:8088/org/findOrAgendaByYear?
+  findOrgAgendaByMonthConfig: http://localhost:8088/org/findOrAgendaByMonth?
+  findOrgAgendaByDayConfig: http://localhost:8088/org/findOrAgendaByDay?

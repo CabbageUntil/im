@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.webOrg.AbOrgMapper" >
+  <resultMap id="BaseResultMap" type="com.csxx.dao.webOrg.AbOrg" >
+    <constructor >
+      <idArg column="org_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="org_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="tel" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="email" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="org_address" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="create_datetime" jdbcType="DATE" javaType="java.util.Date" />
+      <arg column="dissolved_datetime" jdbcType="DATE" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <!--公司信息映射-->
+  <resultMap id="OtherCom" type="com.csxx.dao.webOrg.AbOrg">
+    <id property="orgId" column="org_id" />
+    <result property="orgName" column="org_name" />
+    <result property="tel" column="tel" />
+    <result property="email" column="email" />
+    <result property="orgAddress" column="org_address" />
+    <result property="createDatetime" column="create_datetime" />
+    <result property="dissolvedDatetime" column="dissolved_datetime" />
+  </resultMap>
+  <resultMap id="JoinComMap" type="com.csxx.bo.webOrg.JoinCom">
+    <id property="id" column="org_id" />
+    <result property="name" column="org_name" />
+    <result property="entry_date" column="entry_date" />
+    <result property="tel" column="tel" />
+    <result property="email" column="email" />
+    <result property="address" column="org_address" />
+  </resultMap>
+  <resultMap id="OwnComMap" type="com.csxx.bo.webOrg.OwnCom">
+    <id property="id" column="org_id" />
+    <result property="name" column="org_name" />
+    <result property="create_date" column="create_date" />
+    <result property="tel" column="tel" />
+    <result property="email" column="email" />
+    <result property="address" column="org_address" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    org_id, org_name, tel, email, org_address, create_datetime, dissolved_datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ab_org_tab
+    where org_id = #{orgId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ab_org_tab
+    where org_id = #{orgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.csxx.dao.webOrg.AbOrg" >
+    insert into ab_org_tab (org_id, org_name, tel, 
+      email, org_address, create_datetime, 
+      dissolved_datetime)
+    values (#{orgId,jdbcType=INTEGER}, #{orgName,jdbcType=NVARCHAR}, #{tel,jdbcType=NVARCHAR}, 
+      #{email,jdbcType=NVARCHAR}, #{orgAddress,jdbcType=NVARCHAR}, #{createDatetime,jdbcType=DATE}, 
+      #{dissolvedDatetime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" keyProperty="orgId" useGeneratedKeys="true" parameterType="com.csxx.dao.webOrg.AbOrg" >
+    insert into ab_org_tab
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+     <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="orgName != null" >
+        org_name,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="orgAddress != null" >
+        org_address,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="dissolvedDatetime != null" >
+        dissolved_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=NVARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=NVARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=NVARCHAR},
+      </if>
+      <if test="orgAddress != null" >
+        #{orgAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=DATE},
+      </if>
+      <if test="dissolvedDatetime != null" >
+        #{dissolvedDatetime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbOrg" >
+    update ab_org_tab
+    <set >
+      <if test="orgName != null" >
+        org_name = #{orgName,jdbcType=NVARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=NVARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=NVARCHAR},
+      </if>
+      <if test="orgAddress != null" >
+        org_address = #{orgAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=DATE},
+      </if>
+      <if test="dissolvedDatetime != null" >
+        dissolved_datetime = #{dissolvedDatetime,jdbcType=DATE},
+      </if>
+    </set>
+    where org_id = #{orgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbOrg" >
+    update ab_org_tab
+    set org_name = #{orgName,jdbcType=NVARCHAR},
+      tel = #{tel,jdbcType=NVARCHAR},
+      email = #{email,jdbcType=NVARCHAR},
+      org_address = #{orgAddress,jdbcType=NVARCHAR},
+      create_datetime = #{createDatetime,jdbcType=DATE},
+      dissolved_datetime = #{dissolvedDatetime,jdbcType=DATE}
+    where org_id = #{orgId,jdbcType=INTEGER}
+  </update>
+
+  <select id="existsByOrgName" parameterType="string" resultType="boolean">
+    select CASE WHEN count(*) > 0 THEN 1 ELSE 0 END
+    from ab_org_tab
+    where org_name = #{orgName}
+  </select>
+
+  <!--根据用户名查询其他的公司-->
+  <select id="selectOtherComByUserFilter" parameterType="map" resultMap="OtherCom">
+    SELECT * FROM ab_org_tab a WHERE a.org_id  NOT IN(
+      SELECT org_id
+      FROM ab_member_tab ss
+      WHERE
+      ss.onenet_owner = #{user}
+    )
+  </select>
+   <!--查询已经加入的公司的信息-->
+  <select id="selectJoinComByUserFilter" parameterType="map" resultMap="JoinComMap">
+    select aot.org_id, aot.org_name, CONVERT(varchar(100), amt.entry_date, 23) entry_date, aot.tel, aot.email, aot.org_address
+    from ab_org_tab aot
+    inner join ab_member_tab amt
+    on aot.org_id = amt.org_id
+    where amt.onenet_owner = #{user}
+    <if test="filter != null">
+      and aot.org_name like #{filter}
+    </if>
+  </select>
+
+  <select id="selectOwnComByUserFilter" parameterType="map" resultMap="OwnComMap">
+    select aot.org_id, aot.org_name, CONVERT(varchar(100), aot.create_datetime, 23) create_date, aot.tel, aot.email, aot.org_address
+    from ab_org_tab aot
+    inner join ab_member_tab amt
+    on aot.org_id = amt.org_id
+    where amt.onenet_owner = #{user}
+    <if test="filter != null">
+      and aot.org_name like #{filter}
+    </if>
+    and amt.role_id = 0
+  </select>
+
+  <select id="selectCountByOrgName" parameterType="string" resultType="int">
+    select count(*)
+    from ab_org_tab
+    where org_name = #{orgName}
+  </select>
+
+  <select id="selectJoinComCountByUsername" parameterType="string" resultType="int">
+    select count(*)
+    from ab_member_tab
+    where onenet_owner = #{username}
+  </select>
+
+  <select id="selectOwnComCountByUsername" parameterType="string" resultType="int">
+    select count(*)
+    from ab_member_tab
+    where role_id = 0
+    and onenet_owner = #{username}
+  </select>
+</mapper>

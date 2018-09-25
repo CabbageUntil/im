@@ -1,0 +1,31 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  profiles:
+    active: test
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+  messages:
+    basename: i18n/messages
+    cache-duration: 3600
+    encoding: UTF-8
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.csxx.model
+
+mapper:
+  mappers: com.csxx.utils.MyMapper
+  not-empty: false
+  identity: SQLSERVER
+
+pagehelper:
+  helper-dialect: sqlserver2012
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

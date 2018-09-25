@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.webOrg.AbMemberDetailMapper" >
+
+  <!-- 结果集 BEGIN -->
+  <resultMap id="BaseResultMap" type="com.csxx.dao.webOrg.AbMemberDetail" >
+    <constructor >
+      <idArg column="detail_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="member_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="category" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="label" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="content" jdbcType="NVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+	<!-- 结果集 END -->
+
+	<!-- SQL BEGIN -->
+  <sql id="Base_Column_List" >
+    detail_id, member_id, category, label, content
+  </sql>
+	<!-- SQL END -->
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ab_member_detail_tab
+    where detail_id = #{detailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ab_member_detail_tab
+    where detail_id = #{detailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.csxx.dao.webOrg.AbMemberDetail" >
+    insert into ab_member_detail_tab (detail_id, member_id, category, 
+      label, content)
+    values (#{detailId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{category,jdbcType=NVARCHAR}, 
+      #{label,jdbcType=NVARCHAR}, #{content,jdbcType=NVARCHAR})
+  </insert>
+  <insert id="insertSelective" keyProperty="orgId" useGeneratedKeys="true" parameterType="com.csxx.dao.webOrg.AbMemberDetail" >
+    insert into ab_member_detail_tab
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="detailId != null" >
+        detail_id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="category != null" >
+        category,
+      </if>
+      <if test="label != null" >
+        label,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="detailId != null" >
+        #{detailId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="category != null" >
+        #{category,jdbcType=NVARCHAR},
+      </if>
+      <if test="label != null" >
+        #{label,jdbcType=NVARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbMemberDetail" >
+    update ab_member_detail_tab
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="category != null" >
+        category = #{category,jdbcType=NVARCHAR},
+      </if>
+      <if test="label != null" >
+        label = #{label,jdbcType=NVARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where detail_id = #{detailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbMemberDetail" >
+    update ab_member_detail_tab
+    set member_id = #{memberId,jdbcType=INTEGER},
+      category = #{category,jdbcType=NVARCHAR},
+      label = #{label,jdbcType=NVARCHAR},
+      content = #{content,jdbcType=NVARCHAR}
+    where detail_id = #{detailId,jdbcType=INTEGER}
+  </update>
+
+  <insert id="batchInsert" parameterType="list">
+    <foreach collection="list" separator=";" item="item">
+      insert into ab_member_detail_tab (member_id, category, label, content)
+      values (#{item.memberId}, #{item.category}, #{item.label}, #{item.content})
+    </foreach>
+  </insert>
+
+	<!-- 仅查询某员工的明细数据部分 BEGIN -->
+	<!-- 员工电话明细 -->
+	<select id="getMemberTel" parameterType="int" resultType="com.csxx.vo.webOrg.IdLabelContent">
+		select detail_id as id,
+		label,
+		content
+		from ab_member_detail_tab
+		where member_id = #{id}
+		and category = 'tel'
+	</select>
+
+	<!-- 员工电子邮件明细 -->
+	<select id="getMemberEmail" parameterType="int" resultType="com.csxx.vo.webOrg.IdLabelContent">
+		select detail_id as id,
+		label,
+		content
+		from ab_member_detail_tab
+		where member_id = #{id}
+		and category = 'email'
+	</select>
+
+	<!-- 员工地址明细 -->
+	<select id="getMemberAddress" parameterType="int" resultType="com.csxx.vo.webOrg.IdLabelContent">
+		select detail_id as id,
+		label,
+		content
+		from ab_member_detail_tab
+		where member_id = #{id}
+		and category = 'address'
+	</select>
+
+	<!-- 员工其他明细 -->
+	<select id="getMemberOther" parameterType="int" resultType="com.csxx.vo.webOrg.IdLabelContent">
+		select detail_id as id,
+		label,
+		content
+		from ab_member_detail_tab
+		where member_id = #{id}
+		and category = 'other'
+	</select>
+
+	<resultMap id="memberDetailInfoMap" type="com.csxx.vo.webOrg.MemberListDetail">
+		<id column="member_id"/>
+		<collection property="tel" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberTel" column="member_id"/>
+		<collection property="email" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberEmail" column="member_id"/>
+		<collection property="address" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberAddress" column="member_id"/>
+		<collection property="other" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberOther" column="member_id"/>
+	</resultMap>
+
+	<select id="findMemberDetailInfoById" resultMap="memberDetailInfoMap" parameterType="int">
+		select amt.member_id
+		from ab_member_tab amt
+		where amt.member_id = #{memberId}
+	</select>
+	<!-- 仅查询某员工的明细数据部分 BEGIN -->
+</mapper>

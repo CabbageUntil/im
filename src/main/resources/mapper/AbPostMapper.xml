@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.webOrg.AbPostMapper" >
+  <resultMap id="BaseResultMap" type="com.csxx.dao.webOrg.AbPost" >
+    <constructor >
+      <idArg column="post_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="org_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="post_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    post_id, org_id, post_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ab_post_tab
+    where post_id = #{postId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ab_post_tab
+    where post_id = #{postId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.csxx.dao.webOrg.AbPost" >
+    insert into ab_post_tab (post_id, org_id, post_name
+      )
+    values (#{postId,jdbcType=INTEGER}, #{orgId,jdbcType=INTEGER}, #{postName,jdbcType=NVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.csxx.dao.webOrg.AbPost" >
+    insert into ab_post_tab
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        post_id,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="postName != null" >
+        post_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="postName != null" >
+        #{postName,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbPost" >
+    update ab_post_tab
+    <set >
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="postName != null" >
+        post_name = #{postName,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where post_id = #{postId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbPost" >
+    update ab_post_tab
+    set org_id = #{orgId,jdbcType=INTEGER},
+      post_name = #{postName,jdbcType=NVARCHAR}
+    where post_id = #{postId,jdbcType=INTEGER}
+  </update>
+</mapper>

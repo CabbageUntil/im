@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.webOrg.AbMemberMapper" >
+
+	<!-- 结果集 BEGIN -->
+	<!-- 标准 -->
+  <resultMap id="BaseResultMap" type="com.csxx.dao.webOrg.AbMember" >
+    <constructor >
+      <idArg column="member_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="org_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="member_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="dept_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="post_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="role_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="education" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="marital_status" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="onenet_owner" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="member_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="sex" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="birthday" jdbcType="DATE" javaType="java.util.Date" />
+      <arg column="emergency_user" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="emergency_mobile" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="applicate_date" jdbcType="DATE" javaType="java.util.Date" />
+      <arg column="update_datetime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="entry_date" jdbcType="DATE" javaType="java.util.Date" />
+      <arg column="leave_date" jdbcType="DATE" javaType="java.util.Date" />
+      <arg column="id_card_exp" jdbcType="DATE" javaType="java.util.Date" />
+      <arg column="native_place" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="animal" jdbcType="TINYINT" javaType="java.lang.Byte" />
+    </constructor>
+  </resultMap>
+
+  <resultMap id="AllMemberMap" type="com.csxx.dao.webOrg.AbMember">
+    <id property="memberId" column="member_id" />
+    <result property="orgId" column="org_id" />
+    <result property="memberName" column="member_name" />
+    <result property="deptId" column="dept_id" />
+    <result property="postId" column="post_id" />
+    <result property="roleId" column="role_id" />
+    <result property="education" column="education" />
+    <result property="maritalStatus" column="marital_status" />
+    <result property="onenetOwner" column="onenet_owner" />
+    <result property="memberStatus" column="member_status" />
+    <result property="sex" column="sex" />
+    <result property="birthday" column="birthday" />
+    <result property="emergencyUser" column="emergency_user" />
+    <result property="emergencyMobile" column="emergency_mobile" />
+    <result property="applicateDate" column="applicate_date" />
+    <result property="updateDatetime" column="org_address" />
+    <result property="entryDate" column="entry_date" />
+    <result property="leaveDate" column="leave_date" />
+    <result property="idCardExp" column="id_card_exp" />
+    <result property="nativePlace" column="native_place" />
+    <result property="dept_name" column="dept_name" />
+  </resultMap>
+
+	<!-- 登录公司所需信息结果集 -->
+	<resultMap id="OrgLoginMap" type="com.csxx.vo.webOrg.UserInfo">
+		<result column="org_id" property="orgId"/>
+		<result column="member_id" property="memberId"/>
+		<result column="org_name" property="orgName"/>
+		<result column="member_name" property="memberName"/>
+		<result column="role_name" property="role"/>
+	</resultMap>
+
+    <!--根据部门编号和公司编号查询员工信息-->
+    <resultMap id="selectMemList" type="com.csxx.utils.memList">
+      <result column="member_id" property="memberId"/>
+      <result column="member_name" property="memberName"/>
+    </resultMap>
+
+	<!-- 员工信息列表所需信息结果集 -->
+	<resultMap id="MemberInfoMap" type="com.csxx.vo.webOrg.MemberInfoVO">
+		<id column="member_id" property="id"/>
+		<result column="member_name" property="name"/>
+		<result column="dept_name" property="department"/>
+		<result column="post_name" property="post"/>
+		<result column="marital_status" property="maritalStatus"/>
+		<result column="id_card_exp" property="idCardExp"/>
+		<result column="native_place" property="nativePlace"/>
+		<result column="emergency_user" property="emergencyUser"/>
+		<result column="emergency_mobile" property="emergencyMobile"/>
+		<result column="applicate_date" property="applicateDate"/>
+		<result column="entry_date" property="entryDate"/>
+		<result column="leave_date" property="leaveDate"/>
+		<result column="member_status" property="memberStatus"/>
+	</resultMap>
+	<!-- 结果集 END -->
+
+	<!-- SQL BEGIN -->
+  <!-- AB_MEMBER_TAB表自动生成字段 -->
+  <sql id="Base_Column_List" >
+   member_id, org_id, member_name, dept_id, post_id, role_id, education, marital_status,
+    onenet_owner, member_status, sex, birthday, emergency_user, emergency_mobile, applicate_date,
+    update_datetime, entry_date, leave_date, id_card_exp, native_place, animal
+  </sql>
+	<!-- SQL END -->
+
+  <!--根据id查找员工信息-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from ab_member_tab
+    where member_id = #{memberId,jdbcType=INTEGER}
+  </select>
+
+
+   <!--根据部门编号和公司编号查询员工的编号和员工的姓名-->
+  <select id="selectByOrgIdAndDeptId" resultMap="selectMemList" parameterType="com.csxx.dao.webOrg.AbMember"  >
+      SELECT
+        member_id ,member_name
+      FROM ab_member_tab
+      WHERE
+      org_id = #{orgId,jdbcType=INTEGER}
+      AND
+      dept_id = #{deptId,jdbcType=INTEGER}
+
+  </select>
+  <!--更具id查询员工的详细信息：邮箱，部门，基本信息等-->
+  <select id="selectByMemberId" resultMap="AllMemberMap" parameterType="java.lang.Integer" >
+
+      <if test="memberId!=null">
+        SELECT DISTINCT
+        meb.*,
+        dept_name,
+        (SELECT content FROM ab_member_detail_tab WHERE category ='tel'
+              <if test="memberId!=null">
+                AND member_id = #{memberId}
+              </if>
+        ) tel,
+        (SELECT content FROM ab_member_detail_tab WHERE category = 'email'
+          <if test="memberId!=null">
+            AND member_id =#{memberId}
+          </if>
+        ) email,
+        (SELECT content FROM ab_member_detail_tab WHERE category ='other'
+          <if test="memberId!=null">
+              AND  member_id =#{memberId}
+          </if>
+        ) qq
+        FROM ab_member_tab meb
+        LEFT JOIN ab_member_detail_tab med
+        ON meb.member_id = med.member_id
+        LEFT JOIN ab_dept_tab dep
+        ON dep.dept_id = meb.dept_id
+        WHERE meb.member_id =#{memberId}
+      </if>
+
+  </select>
+
+  <!--删除员工信息-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ab_member_tab
+    where member_id = #{memberId,jdbcType=INTEGER}
+  </delete>
+  <!--添加员工信息-->
+  <insert id="insert" parameterType="com.csxx.dao.webOrg.AbMember" >
+    insert into ab_member_tab (member_id, org_id, member_name,
+      dept_id, post_id, role_id,
+      education, marital_status, onenet_owner,
+      member_status, sex, birthday,
+      emergency_user, emergency_mobile, applicate_date,
+      update_datetime, entry_date, leave_date,
+      leave_date, id_card_exp, native_place, animal
+      )
+    values (#{memberId,jdbcType=INTEGER}, #{orgId,jdbcType=INTEGER}, #{memberName,jdbcType=NVARCHAR},
+      #{deptId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER},
+      #{education,jdbcType=TINYINT}, #{maritalStatus,jdbcType=BIT}, #{onenetOwner,jdbcType=NVARCHAR},
+      #{memberStatus,jdbcType=TINYINT}, #{sex,jdbcType=TINYINT}, #{birthday,jdbcType=DATE},
+      #{emergencyUser,jdbcType=NVARCHAR}, #{emergencyMobile,jdbcType=NVARCHAR}, #{applicateDate,jdbcType=DATE},
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{entryDate,jdbcType=DATE}, #{leaveDate,jdbcType=DATE},
+      #{id_card_exp,jdbcType=DATE}, #{native_place,jdbcType=TINYINT}, #{animal,jdbcType=NVARCHAR}
+      )
+  </insert>
+  <!--添加个人记录信息-->
+  <insert id="insertSelective" keyProperty="memberId" useGeneratedKeys="true" parameterType="com.csxx.dao.webOrg.AbMember" >
+
+    insert into ab_member_tab
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="memberName != null" >
+        member_name,
+      </if>
+      <if test="deptId != null" >
+        dept_id,
+      </if>
+      <if test="postId != null" >
+        post_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="education != null" >
+        education,
+      </if>
+      <if test="maritalStatus != null" >
+        marital_status,
+      </if>
+      <if test="onenetOwner != null" >
+        onenet_owner,
+      </if>
+      <if test="memberStatus != null" >
+        member_status,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="emergencyUser != null" >
+        emergency_user,
+      </if>
+      <if test="emergencyMobile != null" >
+        emergency_mobile,
+      </if>
+      <if test="applicateDate != null" >
+        applicate_date,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="entryDate != null" >
+        entry_date,
+      </if>
+      <if test="leaveDate != null" >
+        leave_date,
+      </if>
+      <if test="idCardExp != null" >
+        id_card_exp,
+      </if>
+      <if test="nativePlace != null" >
+        native_place,
+      </if>
+      <if test="animal != null" >
+        animal,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=NVARCHAR},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null" >
+        #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="education != null" >
+        #{education,jdbcType=TINYINT},
+      </if>
+      <if test="maritalStatus != null" >
+        #{maritalStatus,jdbcType=BIT},
+      </if>
+      <if test="onenetOwner != null" >
+        #{onenetOwner,jdbcType=NVARCHAR},
+      </if>
+      <if test="memberStatus != null" >
+        #{memberStatus,jdbcType=TINYINT},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="emergencyUser != null" >
+        #{emergencyUser,jdbcType=NVARCHAR},
+      </if>
+      <if test="emergencyMobile != null" >
+        #{emergencyMobile,jdbcType=NVARCHAR},
+      </if>
+      <if test="applicateDate != null" >
+        #{applicateDate,jdbcType=DATE},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entryDate != null" >
+        #{entryDate,jdbcType=DATE},
+      </if>
+      <if test="leaveDate != null" >
+        #{leaveDate,jdbcType=DATE},
+      </if>
+      <if test="idCardExp != null" >
+        #{idCardExp,jdbcType=DATE},
+      </if>
+      <if test="nativePlace != null" >
+        #{nativePlace,jdbcType=NVARCHAR},
+      </if>
+      <if test="animal != null" >
+        #{animal,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbMember" >
+    update ab_member_tab
+    <set >
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="memberName != null" >
+        member_name = #{memberName,jdbcType=NVARCHAR},
+      </if>
+      <if test="deptId != null" >
+        dept_id = #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null" >
+        post_id = #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="education != null" >
+        education = #{education,jdbcType=TINYINT},
+      </if>
+      <if test="maritalStatus != null" >
+        marital_status = #{maritalStatus,jdbcType=BIT},
+      </if>
+      <if test="onenetOwner != null" >
+        onenet_owner = #{onenetOwner,jdbcType=NVARCHAR},
+      </if>
+      <if test="memberStatus != null" >
+        member_status = #{memberStatus,jdbcType=TINYINT},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="emergencyUser != null" >
+        emergency_user = #{emergencyUser,jdbcType=NVARCHAR},
+      </if>
+      <if test="emergencyMobile != null" >
+        emergency_mobile = #{emergencyMobile,jdbcType=NVARCHAR},
+      </if>
+      <if test="applicateDate != null" >
+        applicate_date = #{applicateDate,jdbcType=DATE},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entryDate != null" >
+        entry_date = #{entryDate,jdbcType=DATE},
+      </if>
+      <if test="leaveDate != null" >
+        leave_date = #{leaveDate,jdbcType=DATE},
+      </if>
+      <if test="idCardExp != null" >
+        id_card_exp = #{idCardExp,jdbcType=DATE},
+      </if>
+      <if test="nativePlace != null" >
+        native_place = #{nativePlace,jdbcType=NVARCHAR},
+      </if>
+      <if test="animal != null" >
+        animal = #{animal,jdbcType=TINYINT},
+      </if>
+    </set>
+    where member_id = #{memberId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbMember" >
+    update ab_member_tab
+    set org_id = #{orgId,jdbcType=INTEGER},
+      member_name = #{memberName,jdbcType=NVARCHAR},
+      dept_id = #{deptId,jdbcType=INTEGER},
+      post_id = #{postId,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=INTEGER},
+      education = #{education,jdbcType=TINYINT},
+      marital_status = #{maritalStatus,jdbcType=BIT},
+      onenet_owner = #{onenetOwner,jdbcType=NVARCHAR},
+      member_status = #{memberStatus,jdbcType=TINYINT},
+      sex = #{sex,jdbcType=TINYINT},
+      birthday = #{birthday,jdbcType=DATE},
+      emergency_user = #{emergencyUser,jdbcType=NVARCHAR},
+      emergency_mobile = #{emergencyMobile,jdbcType=NVARCHAR},
+      applicate_date = #{applicateDate,jdbcType=DATE},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      entry_date = #{entryDate,jdbcType=DATE},
+      leave_date = #{leaveDate,jdbcType=DATE},
+      id_card_exp = #{idCardExp,jdbcType=DATE},
+      native_place = #{nativePlace,jdbcType=NVARCHAR},
+      animal = #{animal,jdbcType=TINYINT}
+    where member_id = #{memberId,jdbcType=INTEGER}
+  </update>
+
+	<select id="fetchMemberListByFilterAndStatus" resultMap="MemberInfoMap" parameterType="map" >
+		select amt.member_id, amt.member_name, adt.dept_name, apt.post_name, amt.education, amt.marital_status,
+						amt.sex, amt.birthday, amt.id_card_exp, amt.native_place, amt.animal, amt.emergency_user,
+						amt.emergency_mobile, amt.applicate_date, amt.entry_date, amt.leave_date, amt.member_status
+		from ab_member_tab amt
+		inner join ab_dept_tab adt
+		on amt.dept_id = adt.dept_id
+		and amt.org_id = adt.org_id
+		inner join ab_post_tab apt
+		on amt.post_id = apt.post_id
+		where amt.member_status = #{status}
+		and amt.org_id = #{orgId}
+		<if test="filter != null">
+			and amt.member_name like #{filter}
+		</if>
+	</select>
+  <select id="fetchMemberListByFilter" resultMap="MemberInfoMap" parameterType="map" >
+    select amt.member_id, amt.member_name, adt.dept_name, apt.post_name, amt.education, amt.marital_status,
+    amt.sex, amt.birthday, amt.id_card_exp, amt.native_place, amt.animal, amt.emergency_user,
+    amt.emergency_mobile, amt.applicate_date, amt.entry_date, amt.leave_date, amt.member_status
+    from ab_member_tab amt
+    inner join ab_dept_tab adt
+    on amt.dept_id = adt.dept_id
+    and amt.org_id = adt.org_id
+    inner join ab_post_tab apt
+    on amt.post_id = apt.post_id
+    where  amt.org_id = #{orgId}
+    <if test="filter != null">
+      and amt.member_name like #{filter}
+    </if>
+  </select>
+  <!-- 查询与指定用户有关联的所有公司 BEGIN -->
+  <resultMap id="getAllCompanyMap" type="hashmap">
+    <result property="key" column="org_id"/>
+    <result property="value" column="org_name"/>
+  </resultMap>
+
+  <select id="findAllCompanyByUsername" resultMap="getAllCompanyMap" parameterType="string">
+    select aot.org_id, aot.org_name
+    from ab_member_tab amt
+    inner join ab_org_tab aot
+    on amt.org_id = aot.org_id
+    where amt.onenet_owner = #{username}
+  </select>
+  <!-- 查询与指定用户有关联的所有公司 END -->
+
+  <!-- 查询某个员工的明细数据 BEGIN -->
+  <!-- 员工电话明细 -->
+  <select id="getMemberTel" parameterType="int" resultType="com.csxx.vo.webOrg.IdLabelContent">
+    select detail_id as id,
+            label,
+            content
+    from ab_member_detail_tab
+    where member_id = #{id}
+    and category = 'tel'
+  </select>
+
+  <!-- 员工电子邮件明细 -->
+  <select id="getMemberEmail" parameterType="int" resultType="com.csxx.vo.webOrg.IdLabelContent">
+    select detail_id as id,
+    label,
+    content
+    from ab_member_detail_tab
+    where member_id = #{id}
+    and category = 'email'
+  </select>
+
+  <!-- 员工地址明细 -->
+  <select id="getMemberAddress" parameterType="int" resultType="com.csxx.vo.webOrg.IdLabelContent">
+    select detail_id as id,
+    label,
+    content
+    from ab_member_detail_tab
+    where member_id = #{id}
+    and category = 'address'
+  </select>
+
+  <!-- 员工其他明细 -->
+  <select id="getMemberOther" parameterType="int" resultType="com.csxx.vo.webOrg.IdLabelContent">
+    select detail_id as id,
+    label,
+    content
+    from ab_member_detail_tab
+    where member_id = #{id}
+    and category = 'other'
+  </select>
+
+  <resultMap id="archiveMap" type="com.csxx.vo.webOrg.Archive">
+    <id column="member_id" property="id"/>
+    <result column="member_name" property="name"/>
+    <result column="dept_name" property="department"/>
+    <result column="post_name" property="post"/>
+    <result column="marital_status" property="maritalStatus"/>
+    <result column="id_card_exp" property="idCardExp"/>
+    <result column="native_place" property="nativePlace"/>
+    <result column="emergency_user" property="emergencyUser"/>
+    <result column="emergency_mobile" property="emergencyMobile"/>
+    <result column="applicate_date" property="applicateDate"/>
+    <result column="entry_date" property="entryDate"/>
+    <result column="leave_date" property="leaveDate"/>
+    <result column="member_status" property="memberStatus"/>
+    <collection property="tel" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberTel" column="member_id"/>
+    <collection property="email" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberEmail" column="member_id"/>
+    <collection property="address" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberAddress" column="member_id"/>
+    <collection property="other" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberOther" column="member_id"/>
+  </resultMap>
+
+  <!-- 根据公司编号和自己的账号查询当前用户的详细信息 (必须是已经拥有部门的用户)-->
+  <select id="findArchiveByUsernameAndOrgId" resultMap="archiveMap" parameterType="map">
+    select amt.member_id,
+            amt.member_name,
+            adt.dept_name,
+            apt.post_name,
+            amt.education,
+            amt.marital_status,
+            amt.sex,
+            amt.birthday,
+            amt.id_card_exp,
+            amt.native_place,
+            amt.animal,
+            amt.emergency_user,
+            amt.emergency_mobile,
+            amt.applicate_date,
+            amt.entry_date,
+            amt.leave_date,
+            amt.member_status
+    from ab_member_tab amt
+    inner join ab_dept_tab adt
+    on amt.dept_id = adt.dept_id
+    inner join ab_post_tab apt
+    on amt.post_id = apt.post_id
+    where amt.onenet_owner = #{username}
+    and amt.org_id = #{orgId}
+  </select>
+
+  <!-- 更具员工编号和公司编号查询详细的员工信息-->
+
+  <select id="findArchiveByUsernameAndMemberId" resultMap="archiveMap" parameterType="java.lang.Integer">
+    select amt.member_id,
+            amt.member_name,
+            amt.education,
+            amt.marital_status,
+            amt.sex,
+            amt.birthday,
+            amt.id_card_exp,
+            amt.native_place,
+            amt.animal,
+            amt.emergency_user,
+            amt.emergency_mobile,
+            amt.applicate_date,
+            amt.entry_date,
+            amt.leave_date,
+            amt.member_status
+    from ab_member_tab amt
+    where amt.member_id =  #{memberId}
+   and amt.org_id = #{orgId}
+  </select>
+
+
+  <select id="selectByOrgIdAndUsernameAndStatus" resultMap="OrgLoginMap" parameterType="map">
+    select amt.org_id, amt.member_id, aot.org_name, amt.member_name, art.role_name
+    from ab_member_tab amt
+    inner join ab_org_tab aot
+    on amt.org_id = aot.org_id
+    inner join ab_role_tab art
+    on amt.role_id = art.role_id
+
+    where amt.org_id = #{orgId}
+    and amt.onenet_owner = #{username}
+    and amt.member_status = #{status}
+  </select>
+  <update id="RemoveMember" parameterType="com.csxx.dao.webOrg.AbMember" >
+      update ab_member_tab
+      set
+        member_status = #{memberStatus,jdbcType=TINYINT},
+         leave_date = #{leaveDate,jdbcType=DATE}
+      where member_id = #{memberId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

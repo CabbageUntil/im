@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.webOrg.AbRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.csxx.dao.webOrg.AbRole" >
+    <constructor >
+      <idArg column="role_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="role_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    role_id, role_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ab_role_tab
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ab_role_tab
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.csxx.dao.webOrg.AbRole" >
+    insert into ab_role_tab (role_id, role_name)
+    values (#{roleId,jdbcType=INTEGER}, #{roleName,jdbcType=NVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.csxx.dao.webOrg.AbRole" >
+    insert into ab_role_tab
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="roleName != null" >
+        role_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="roleName != null" >
+        #{roleName,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbRole" >
+    update ab_role_tab
+    <set >
+      <if test="roleName != null" >
+        role_name = #{roleName,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbRole" >
+    update ab_role_tab
+    set role_name = #{roleName,jdbcType=NVARCHAR}
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+</mapper>
