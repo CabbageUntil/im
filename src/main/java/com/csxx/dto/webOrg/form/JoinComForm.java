@@ -28,6 +28,18 @@ public class JoinComForm implements Serializable {
 
     private Integer orgId;
 
+    private Byte animal;
+
+    private  Byte sybolicAnimal;
+
+    private String idCard;
+
+    private String blankId;
+
+    private String blankName;
+
+    private String nativePlace;
+
     private List<LabelValue> telList;
 
     private List<LabelValue>  phoneList;

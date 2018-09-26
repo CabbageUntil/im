@@ -1,8 +1,15 @@
 package com.csxx.service.webOrg.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.csxx.config.webOrg.WebOrgConfig;
 import com.csxx.converter.common.PageInfo2TableDTO;
+import com.csxx.converter.org.LabelValue2AbMemberDetail;
 import com.csxx.dao.webOrg.AbMember;
+import com.csxx.dao.webOrg.AbMemberDetail;
+import com.csxx.dao.webOrg.AbOrg;
+import com.csxx.dto.webOrg.form.JoinComForm;
+import com.csxx.dto.webOrg.form.UserArchiveForm;
 import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.MemberStatusEnum;
 import com.csxx.enums.webOrg.RoleEnum;
@@ -10,6 +17,7 @@ import com.csxx.mapper.webOrg.AbMemberDetailMapper;
 import com.csxx.mapper.webOrg.AbMemberMapper;
 import com.csxx.repository.webOrg.MapRepository;
 import com.csxx.service.webOrg.WebMemberService;
+import com.csxx.utils.DateUtils;
 import com.csxx.utils.ResponseEntityUtil;
 import com.csxx.utils.memList;
 import com.csxx.vo.common.ResponseEntity;
@@ -22,6 +30,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -197,6 +206,41 @@ public class WebMemberServiceImpl implements WebMemberService{
     public Archive findMemberByMemberId(UserInfo info, Integer memberId) {
         Integer orgId  = info.getOrgId();
         return abMemberMapper.findArchiveByUsernameAndMemberId(memberId,orgId);
+    }
+
+    /**
+     * 保存用户修改信息
+     *
+     * @param user
+     * @param jionComForm
+     */
+    @Override
+    public void saveMember(String user, JoinComForm jionComForm) {
+        AbMember abMember = new AbMember();
+        BeanUtils.copyProperties(jionComForm, abMember);
+        abMember.setOnenetOwner(user);
+        /**
+         * 转换时间格式化 yyyy-MM-dd
+         */
+        abMember.setBirthday(DateUtils.forMatter(jionComForm.getBirthday()));
+        abMember.setIdCardExp(DateUtils.forMatter(jionComForm.getIdCardExp()));
+        abMember.setUpdateDatetime(new Date());
+        int i = abMemberMapper.updateByPrimaryKeySelective(abMember);
+        /**
+         * 添加用户后添加用户详细信息
+         */
+        if(i>0){
+            List<AbMemberDetail> abMemberDetailList = new ArrayList<>();
+            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                    jionComForm.getAddressList(), "address", abMember.getMemberId()));
+            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                    jionComForm.getEmailList(), "email", abMember.getMemberId()));
+            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                    jionComForm.getTelList(), "tel", abMember.getMemberId()));
+            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                    jionComForm.getOtherList(), "other", abMember.getMemberId()));
+            abMemberDetailMapper.batchInsert(abMemberDetailList);
+        }
     }
 
 }

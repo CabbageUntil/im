@@ -229,7 +229,13 @@ public class WebCompanyServiceImpl implements WebCompanyService {
         abMemberDetailMapper.batchInsert(abMemberDetailList);
     }
 
+    /**
+     * 加入公司
+     * @param user
+     * @param jionComForm
+     */
     @Override
+    @Transactional
     public void joinCom(String user, JoinComForm jionComForm) {
         /**
          * 新建个人的记录信息
@@ -246,25 +252,26 @@ public class WebCompanyServiceImpl implements WebCompanyService {
         abMember.setBirthday(DateUtils.forMatter(jionComForm.getBirthday()));
         abMember.setIdCardExp(DateUtils.forMatter(jionComForm.getIdCardExp()));
 
+        abMember.setAnimal(jionComForm.getSybolicAnimal());
+        abMember.setRoleId(2);
         abMember.setMemberStatus(new Byte("1"));
         abMember.setApplicateDate(new Date());
         abMember.setEntryDate(new Date());
-        int i = abMemberMapper.insertSelective(abMember);
+        abMemberMapper.insertSelective(abMember);
+        int i =1;
         /**
          * 添加用户后添加用户详细信息
          */
-        if(i>0){
-            List<AbMemberDetail> abMemberDetailList = new ArrayList<>();
-            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                    jionComForm.getAddressList(), "address", abMember.getMemberId()));
-            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                    jionComForm.getEmailList(), "email", abMember.getMemberId()));
-            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                    jionComForm.getTelList(), "tel", abMember.getMemberId()));
-            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                    jionComForm.getOtherList(), "other", abMember.getMemberId()));
-            abMemberDetailMapper.batchInsert(abMemberDetailList);
-        }
+        List<AbMemberDetail> abMemberDetailList = new ArrayList<>();
+        abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                jionComForm.getAddressList(), "address", abMember.getMemberId()));
+        abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                jionComForm.getEmailList(), "email", abMember.getMemberId()));
+        abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                jionComForm.getTelList(), "tel", abMember.getMemberId()));
+        abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                jionComForm.getOtherList(), "other", abMember.getMemberId()));
+        abMemberDetailMapper.batchInsert(abMemberDetailList);
     }
     /**
      * 创建公司
@@ -290,17 +297,12 @@ public class WebCompanyServiceImpl implements WebCompanyService {
          * 保存创建人信息
          */
         AbMember abMember = new AbMember();
-        /*Gson gson = new Gson();
-        UserArchiveForm archiveForm = gson.fromJson(userInfo, new TypeToken<UserArchiveForm>(){}.getType());*/
-
         UserArchiveForm archiveForm = JSON.parseObject(userInfo,UserArchiveForm.class);
         archiveForm.setTelList(archiveForm.getPhoneList());
-        /**
-         * 属性复制
-         */
         BeanUtils.copyProperties(archiveForm, abMember);
         abMember.setOrgId(abOrg.getOrgId());
         abMember.setOnenetOwner(user);
+        abMember.setAnimal(archiveForm.getSybolicAnimal());
         abMember.setMemberStatus(new Byte("1"));
         abMember.setApplicateDate(new Date());
         abMember.setEntryDate(new Date());
@@ -318,5 +320,5 @@ public class WebCompanyServiceImpl implements WebCompanyService {
         abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
                 archiveForm.getOtherList(), "other", abMember.getMemberId()));
         abMemberDetailMapper.batchInsert(abMemberDetailList);
-}
+    }
 }

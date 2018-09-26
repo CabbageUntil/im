@@ -50,4 +50,11 @@ public class Archive {
 
     private List<IdLabelContent> other;
 
+    /**
+     * 2018-9-26 14:51:28
+     */
+    private String idCard;
+    private String blankId;
+    private String blankName;
+
 }

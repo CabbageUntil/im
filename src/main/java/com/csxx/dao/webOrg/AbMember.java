@@ -35,4 +35,11 @@ public class AbMember {
     private String nativePlace;
     private Byte animal;
 
+
+    private String idCard;
+
+    private String blankId;
+
+    private String blankName;
+
 }

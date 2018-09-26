@@ -1,5 +1,6 @@
 package com.csxx.controller.webOrg;
 
+import com.csxx.dto.webOrg.form.JoinComForm;
 import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.UserInfoEnum;
 import com.csxx.service.webOrg.WebMemberService;
@@ -162,5 +163,21 @@ public class WebMemberController {
                 return ResponseEntityUtil.error(ResultEnum.Fail);
             }
         }
+    }
+
+    /**
+     * 修改用户性你想
+     * @param session
+     * @param form
+     * @return
+     */
+    @PostMapping("/saveMember")
+    public ResponseEntity saveMember(HttpSession session,@RequestBody JoinComForm form) {
+        UserInfo userInfo = getUserInfo(session);
+        if(userInfo != null){
+            webMemberService.saveMember(userInfo.getUsername(),form);
+            return ResponseEntityUtil.success();
+        }
+        return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
     }
 }

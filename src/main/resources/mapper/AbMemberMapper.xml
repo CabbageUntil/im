@@ -27,6 +27,9 @@
       <arg column="id_card_exp" jdbcType="DATE" javaType="java.util.Date" />
       <arg column="native_place" jdbcType="NVARCHAR" javaType="java.lang.String" />
       <arg column="animal" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="id_card" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="blank_id" jdbcType="NVARCHAR" javaType="java.lang.String" />
+      <arg column="blank_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
 
@@ -52,6 +55,9 @@
     <result property="idCardExp" column="id_card_exp" />
     <result property="nativePlace" column="native_place" />
     <result property="dept_name" column="dept_name" />
+    <result property="idCard" column="id_card" />
+    <result property="blankId" column="blank_id" />
+    <result property="blankName" column="blank_name" />
   </resultMap>
 
 	<!-- 登录公司所需信息结果集 -->
@@ -84,6 +90,9 @@
 		<result column="entry_date" property="entryDate"/>
 		<result column="leave_date" property="leaveDate"/>
 		<result column="member_status" property="memberStatus"/>
+		<result column="id_card" property="idCard"/>
+		<result column="blank_id" property="blankId"/>
+		<result column="blank_name" property="blankName"/>
 	</resultMap>
 	<!-- 结果集 END -->
 
@@ -92,7 +101,7 @@
   <sql id="Base_Column_List" >
    member_id, org_id, member_name, dept_id, post_id, role_id, education, marital_status,
     onenet_owner, member_status, sex, birthday, emergency_user, emergency_mobile, applicate_date,
-    update_datetime, entry_date, leave_date, id_card_exp, native_place, animal
+    update_datetime, entry_date, leave_date, id_card_exp, native_place, animal,id_card,blank_id,blank_name
   </sql>
 	<!-- SQL END -->
 
@@ -161,7 +170,7 @@
       member_status, sex, birthday,
       emergency_user, emergency_mobile, applicate_date,
       update_datetime, entry_date, leave_date,
-      leave_date, id_card_exp, native_place, animal
+      leave_date, id_card_exp, native_place, animal,id_card,blank_id,blank_name
       )
     values (#{memberId,jdbcType=INTEGER}, #{orgId,jdbcType=INTEGER}, #{memberName,jdbcType=NVARCHAR},
       #{deptId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER},
@@ -169,7 +178,8 @@
       #{memberStatus,jdbcType=TINYINT}, #{sex,jdbcType=TINYINT}, #{birthday,jdbcType=DATE},
       #{emergencyUser,jdbcType=NVARCHAR}, #{emergencyMobile,jdbcType=NVARCHAR}, #{applicateDate,jdbcType=DATE},
       #{updateDatetime,jdbcType=TIMESTAMP}, #{entryDate,jdbcType=DATE}, #{leaveDate,jdbcType=DATE},
-      #{id_card_exp,jdbcType=DATE}, #{native_place,jdbcType=TINYINT}, #{animal,jdbcType=NVARCHAR}
+      #{id_card_exp,jdbcType=DATE}, #{native_place,jdbcType=TINYINT}, #{animal,jdbcType=NVARCHAR},
+      #{idCard,jdbcType=NVARCHAR}, #{blankId,jdbcType=NVARCHAR}, #{blankName,jdbcType=NVARCHAR}
       )
   </insert>
   <!--添加个人记录信息-->
@@ -240,6 +250,15 @@
       <if test="animal != null" >
         animal,
       </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="blankId != null" >
+        blank_id,
+      </if>
+      <if test="blankName != null" >
+        blank_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="memberId != null" >
@@ -304,6 +323,15 @@
       </if>
       <if test="animal != null" >
         #{animal,jdbcType=TINYINT},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=NVARCHAR},
+      </if>
+      <if test="blankId != null" >
+        #{blankId,jdbcType=NVARCHAR},
+      </if>
+      <if test="blankName != null" >
+        #{blankName,jdbcType=NVARCHAR},
       </if>
     </trim>
   </insert>
@@ -401,7 +429,8 @@
 	<select id="fetchMemberListByFilterAndStatus" resultMap="MemberInfoMap" parameterType="map" >
 		select amt.member_id, amt.member_name, adt.dept_name, apt.post_name, amt.education, amt.marital_status,
 						amt.sex, amt.birthday, amt.id_card_exp, amt.native_place, amt.animal, amt.emergency_user,
-						amt.emergency_mobile, amt.applicate_date, amt.entry_date, amt.leave_date, amt.member_status
+						amt.emergency_mobile, amt.applicate_date, amt.entry_date, amt.leave_date, amt.member_status,
+                        amt.id_card, amt.blank_id, amt.blank_name
 		from ab_member_tab amt
 		inner join ab_dept_tab adt
 		on amt.dept_id = adt.dept_id
@@ -417,7 +446,8 @@
   <select id="fetchMemberListByFilter" resultMap="MemberInfoMap" parameterType="map" >
     select amt.member_id, amt.member_name, adt.dept_name, apt.post_name, amt.education, amt.marital_status,
     amt.sex, amt.birthday, amt.id_card_exp, amt.native_place, amt.animal, amt.emergency_user,
-    amt.emergency_mobile, amt.applicate_date, amt.entry_date, amt.leave_date, amt.member_status
+    amt.emergency_mobile, amt.applicate_date, amt.entry_date, amt.leave_date, amt.member_status,
+    amt.id_card, amt.blank_id, amt.blank_name
     from ab_member_tab amt
     inner join ab_dept_tab adt
     on amt.dept_id = adt.dept_id
@@ -498,6 +528,10 @@
     <result column="applicate_date" property="applicateDate"/>
     <result column="entry_date" property="entryDate"/>
     <result column="leave_date" property="leaveDate"/>
+    <result column="id_card" property="idCard"/>
+    <result column="blank_id" property="blankId"/>
+    <result column="blank_name" property="blankName"/>
+
     <result column="member_status" property="memberStatus"/>
     <collection property="tel" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberTel" column="member_id"/>
     <collection property="email" ofType="com.csxx.vo.webOrg.IdLabelContent" select="getMemberEmail" column="member_id"/>
@@ -512,6 +546,9 @@
             adt.dept_name,
             apt.post_name,
             amt.education,
+            amt.id_card,
+            amt.blank_id,
+            amt.blank_name,
             amt.marital_status,
             amt.sex,
             amt.birthday,
@@ -541,6 +578,9 @@
             amt.education,
             amt.marital_status,
             amt.sex,
+            amt.id_card,
+            amt.blank_id,
+            amt.blank_name,
             amt.birthday,
             amt.id_card_exp,
             amt.native_place,

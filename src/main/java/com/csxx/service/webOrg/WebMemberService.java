@@ -1,6 +1,7 @@
 package com.csxx.service.webOrg;
 
 import com.csxx.bo.contact.User;
+import com.csxx.dto.webOrg.form.JoinComForm;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.common.TableDTO;
 import com.csxx.vo.webOrg.Archive;
@@ -67,5 +68,12 @@ public interface WebMemberService {
      * @return
      */
     Archive findMemberByMemberId(UserInfo info, Integer memberId);
+
+    /**
+     * 保存用户修改信息
+     * @param user
+     * @param jionComForm
+     */
+    void saveMember(String user, JoinComForm jionComForm);
 
 }

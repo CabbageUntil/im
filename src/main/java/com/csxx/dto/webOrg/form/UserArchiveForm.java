@@ -25,6 +25,8 @@ public class UserArchiveForm implements Serializable {
 
     private Byte sex;
 
+    private Byte animal;
+
     private Date birthday;
 
     private Date idCardExp;
@@ -42,5 +44,15 @@ public class UserArchiveForm implements Serializable {
     private List<LabelValue> addressList;
 
     private List<LabelValue> otherList;
+
+    private  Byte sybolicAnimal;
+
+    private String idCard;
+
+    private String blankId;
+
+    private String blankName;
+
+    private String nativePlace;
 
 }
