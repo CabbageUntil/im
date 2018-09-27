@@ -12,6 +12,7 @@ import com.csxx.mapper.webOrg.AbOrgAgendaMapper;
 import com.csxx.utils.DateUtils;
 import com.csxx.utils.NumberUtil;
 import com.csxx.utils.ResponseEntityUtil;
+import com.csxx.utils.ScheduleList;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.common.TableDTO;
 import com.csxx.service.webOrg.WebOrgAgendaService;
@@ -295,6 +296,22 @@ public class WebOrgAgendaServiceImpl implements WebOrgAgendaService {
             status ++;
         }
         return status;
+    }
+
+    /**
+     * 根据用户编号查询用户的日程信息
+     *
+     * @param info
+     * @param memberId
+     * @return
+     */
+    @Override
+    public ResponseEntity selectByMemberIdAndDate(UserInfo info, Integer memberId) {
+        TableDTO<ScheduleList> tableDTO;
+        List<ScheduleList> allDept  = abOrgAgendaMapper.selectByMemberIdAndDate(info.getOrgId());
+        PageInfo<ScheduleList> pageInfo = new PageInfo<>(allDept);
+        tableDTO = PageInfo2TableDTO.convert(pageInfo,null);
+        return ResponseEntityUtil.success(tableDTO);
     }
 
     /**

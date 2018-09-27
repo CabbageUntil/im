@@ -9,6 +9,8 @@ import java.util.List;
 public class JoinComForm implements Serializable {
 
     private static final long serialVersionUID = -6155846975177455979L;
+    //获取需要修改信息的用户的id
+    private Integer id;
 
     private String memberName;
 

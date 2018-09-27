@@ -8,6 +8,13 @@ import java.util.List;
 public interface AbMemberDetailMapper {
     int deleteByPrimaryKey(Integer detailId);
 
+    /**
+     * 删除指定用户的详细用户信息
+     * @param memberId
+     * @return
+     */
+    int deleteByMemberId(Integer memberId);
+
     int insert(AbMemberDetail record);
 
     int insertSelective(AbMemberDetail record);

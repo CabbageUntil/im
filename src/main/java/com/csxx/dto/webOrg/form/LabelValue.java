@@ -11,4 +11,6 @@ public class LabelValue {
     @JsonAlias(value = "content")
     private String value;
 
+  /*  private Integer id;*/
+
 }

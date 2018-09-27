@@ -56,4 +56,12 @@ public interface WebOrgAgendaService {
      * @return
      */
     int deleteOrgAgendaByOnes(UserInfo userInfo,String Id);
+
+    /**
+     * 根据用户编号查询用户的日程信息
+     * @param info
+     * @param memberId
+     * @return
+     */
+    ResponseEntity selectByMemberIdAndDate(UserInfo info,Integer memberId);
 }

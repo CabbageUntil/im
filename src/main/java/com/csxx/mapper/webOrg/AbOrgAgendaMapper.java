@@ -1,6 +1,7 @@
 package com.csxx.mapper.webOrg;
 
 import com.csxx.dao.webOrg.AbOrgAgenda;
+import com.csxx.utils.ScheduleList;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -42,5 +43,11 @@ public interface AbOrgAgendaMapper {
      * @return
      */
     int  deleteOrgAgendaByOne(@Param("agendaId") String Id);
+
+    /**
+     * 根据用户编号和时间查询用户日程信息
+     * @return
+     */
+    List<ScheduleList> selectByMemberIdAndDate(@Param("memberId") Integer memberId);
 
 }

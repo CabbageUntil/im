@@ -9,6 +9,7 @@ import com.csxx.dao.webOrg.AbMember;
 import com.csxx.dao.webOrg.AbMemberDetail;
 import com.csxx.dao.webOrg.AbOrg;
 import com.csxx.dto.webOrg.form.JoinComForm;
+import com.csxx.dto.webOrg.form.LabelValue;
 import com.csxx.dto.webOrg.form.UserArchiveForm;
 import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.MemberStatusEnum;
@@ -209,38 +210,49 @@ public class WebMemberServiceImpl implements WebMemberService{
     }
 
     /**
-     * 保存用户修改信息
+     * 保存信息的实现
+     *
+     * 1.属性复制得到用户基本信息 abMember
+     *
+     * 2.获取用户的id编号，同时将对应编号对应的详细信息删除
+     *
+     * 3.重新添加用户的详细信息
      *
      * @param user
      * @param jionComForm
      */
     @Override
+    @Transactional
     public void saveMember(String user, JoinComForm jionComForm) {
         AbMember abMember = new AbMember();
         BeanUtils.copyProperties(jionComForm, abMember);
-        abMember.setOnenetOwner(user);
         /**
          * 转换时间格式化 yyyy-MM-dd
          */
+        //添加用户编号
+        abMember.setMemberId(jionComForm.getId());
         abMember.setBirthday(DateUtils.forMatter(jionComForm.getBirthday()));
         abMember.setIdCardExp(DateUtils.forMatter(jionComForm.getIdCardExp()));
+        /**
+         * 清空用户对应的详细信息
+         */
+        abMemberDetailMapper.deleteByMemberId(jionComForm.getId());
         abMember.setUpdateDatetime(new Date());
-        int i = abMemberMapper.updateByPrimaryKeySelective(abMember);
+        //int i = 1;
+        abMemberMapper.updateByPrimaryKeySelective(abMember);
         /**
          * 添加用户后添加用户详细信息
          */
-        if(i>0){
-            List<AbMemberDetail> abMemberDetailList = new ArrayList<>();
-            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                    jionComForm.getAddressList(), "address", abMember.getMemberId()));
-            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                    jionComForm.getEmailList(), "email", abMember.getMemberId()));
-            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                    jionComForm.getTelList(), "tel", abMember.getMemberId()));
-            abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                    jionComForm.getOtherList(), "other", abMember.getMemberId()));
-            abMemberDetailMapper.batchInsert(abMemberDetailList);
-        }
+        List<AbMemberDetail> abMemberDetailList = new ArrayList<>();
+        abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                jionComForm.getAddressList(), "address", jionComForm.getId()));
+        abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                jionComForm.getEmailList(), "email", jionComForm.getId()));
+        abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                jionComForm.getTelList(), "tel", jionComForm.getId()));
+        abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
+                jionComForm.getOtherList(), "other", jionComForm.getId()));
+        abMemberDetailMapper.batchInsert(abMemberDetailList);
     }
 
 }

@@ -19,6 +19,12 @@
       <arg column="org_name" jdbcType="NVARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
+  <resultMap id="ScheduleList" type="com.csxx.utils.ScheduleList">
+    <id property="id" column="agenda_id" />
+    <result property="title" column="note1" />
+    <result property="description" column="content" />
+    <result property="start" column="arrange_date" />
+  </resultMap>
   <resultMap id="AbOrgAgendaMap" type="com.csxx.dao.webOrg.AbOrgAgenda">
     <id property="agendaId" column="agenda_id" />
     <result property="year" column="year" />
@@ -42,6 +48,17 @@
     <include refid="Base_Column_List" />
     from ab_org_agenda_tab
     where agenda_id = #{agendaId,jdbcType=NVARCHAR}
+  </select>
+
+  <!--查询个人的日程信息-->
+  <select id="selectByMemberIdAndDate" resultMap="ScheduleList" parameterType="java.lang.Integer" >
+    SELECT  (CAST(abg.note2 as nvarchar(MAX))+CAST(abg.note3 as nvarchar(MAX)) ) content,
+      abg.arrange_date,
+      abg.agenda_id,
+      abg.note1
+      FROM ab_org_agenda_tab abg
+    WHERE abg.org_id = 1
+    AND abg.member_id = 1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from ab_org_agenda_tab

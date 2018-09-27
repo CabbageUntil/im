@@ -26,16 +26,25 @@
     from ab_member_detail_tab
     where detail_id = #{detailId,jdbcType=INTEGER}
   </select>
+    <!--根据详细信息编号删除用户的详细信息-->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from ab_member_detail_tab
     where detail_id = #{detailId,jdbcType=INTEGER}
   </delete>
+
+    <!--删除制定用户对应的详细信息-->
+    <delete id="deleteByMemberId" parameterType="java.lang.Integer" >
+     delete from ab_member_detail_tab
+     where member_id = #{memberId,jdbcType=INTEGER}
+   </delete>
+
   <insert id="insert" parameterType="com.csxx.dao.webOrg.AbMemberDetail" >
     insert into ab_member_detail_tab (detail_id, member_id, category, 
       label, content)
     values (#{detailId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{category,jdbcType=NVARCHAR}, 
       #{label,jdbcType=NVARCHAR}, #{content,jdbcType=NVARCHAR})
   </insert>
+
   <insert id="insertSelective" keyProperty="orgId" useGeneratedKeys="true" parameterType="com.csxx.dao.webOrg.AbMemberDetail" >
     insert into ab_member_detail_tab
     <trim prefix="(" suffix=")" suffixOverrides="," >

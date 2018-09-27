@@ -120,6 +120,23 @@ public class WebOrgAgendaContnroller {
     }
 
     /**
+     * 查询制定用户的日程信息
+     * @param session
+     * @param memberId
+     * @return
+     */
+    @RequestMapping("/fetchCalendar")
+    @ResponseBody
+    public ResponseEntity selectByMemberIdAndDate(HttpSession session,
+                                        @RequestParam("memberId") Integer memberId){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+            return webOrgAgendaService.selectByMemberIdAndDate(userInfo,memberId);
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+    /**
      * 创建日程
      * @param session
      * @param note1 班组备注
