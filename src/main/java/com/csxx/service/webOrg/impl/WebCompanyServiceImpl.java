@@ -252,6 +252,15 @@ public class WebCompanyServiceImpl implements WebCompanyService {
         abMember.setBirthday(DateUtils.forMatter(jionComForm.getBirthday()));
         abMember.setIdCardExp(DateUtils.forMatter(jionComForm.getIdCardExp()));
 
+        /*abMember.setOrgId(abOrg.getOrgId());*/
+        abMember.setAnimal(jionComForm.getSybolicAnimal());
+
+        abMember.setMemberStatus(new Byte("1"));
+        abMember.setApplicateDate(new Date());
+        abMember.setEntryDate(new Date());
+
+
+
         abMember.setAnimal(jionComForm.getSybolicAnimal());
         abMember.setRoleId(2);
         abMember.setMemberStatus(new Byte("1"));

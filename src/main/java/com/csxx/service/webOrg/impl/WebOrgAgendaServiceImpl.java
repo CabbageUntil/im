@@ -120,7 +120,7 @@ public class WebOrgAgendaServiceImpl implements WebOrgAgendaService {
         String sortPredcate;
         TableDTO<AbOrgAgenda> tableDTO;
         if(StringUtils.isNotBlank(sort)){
-            sortPredcate = "member_id asc";
+            sortPredcate = "agenda_id asc";
         }else{
             sortPredcate = sort.split("\\|")[0]+" "+sort.split("\\|")[1];
         }
@@ -301,17 +301,28 @@ public class WebOrgAgendaServiceImpl implements WebOrgAgendaService {
     /**
      * 根据用户编号查询用户的日程信息
      *
-     * @param info
-     * @param memberId
+     * @param userInfo
+     * @param scheduleList
      * @return
      */
     @Override
-    public ResponseEntity selectByMemberIdAndDate(UserInfo info, Integer memberId) {
-        TableDTO<ScheduleList> tableDTO;
-        List<ScheduleList> allDept  = abOrgAgendaMapper.selectByMemberIdAndDate(info.getOrgId());
+    public TableDTO selectByMemberIdAndDate(UserInfo userInfo, ScheduleList scheduleList) {
+        AbOrgAgenda abOrgAgenda  = new AbOrgAgenda();
+        TableDTO<ScheduleList> tableDTO ;
+        String start_time = scheduleList.getStart1();
+        String end  = scheduleList.getEnd();
+       if(start_time!=null&&!"".equals(start_time)&&!"null".equals(start_time)&&
+                end!=null&&!"".equals(end)&&!"null".equals(end)
+        ){
+            abOrgAgenda.setStartDate(DateUtils.getDateFormat(scheduleList.getStart1()));
+            abOrgAgenda.setEndDate(DateUtils.getDateFormat(scheduleList.getEnd()));
+        }
+        abOrgAgenda.setOrgId(userInfo.getOrgId());
+        abOrgAgenda.setMemberId(scheduleList.getMemberId());
+        List<ScheduleList> allDept  = abOrgAgendaMapper.selectByMemberIdAndDate(abOrgAgenda);
         PageInfo<ScheduleList> pageInfo = new PageInfo<>(allDept);
         tableDTO = PageInfo2TableDTO.convert(pageInfo,null);
-        return ResponseEntityUtil.success(tableDTO);
+        return tableDTO;
     }
 
     /**

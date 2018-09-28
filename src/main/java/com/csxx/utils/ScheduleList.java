@@ -16,4 +16,9 @@ public class ScheduleList {
     private String title; //标题
     private String description;//描述
     private String start;//日程执行时间
+
+    private String start1;
+    private String end;
+    private Integer memberId;
+
 }

@@ -33,6 +33,7 @@ public class UserArchiveForm implements Serializable {
 
     private String emergencyUser;
 
+
     private String emergencyMobile;
 
     private List<LabelValue> telList;

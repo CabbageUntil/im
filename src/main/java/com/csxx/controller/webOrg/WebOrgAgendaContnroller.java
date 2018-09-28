@@ -2,10 +2,11 @@ package com.csxx.controller.webOrg;
 
 import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.UserInfoEnum;
+import com.csxx.utils.DateUtils;
+import com.csxx.utils.ScheduleList;
 import com.csxx.vo.common.TableDTO;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.service.webOrg.WebOrgAgendaService;
-import com.csxx.utils.DateUtils;
 import com.csxx.utils.ResponseEntityUtil;
 import com.csxx.vo.webOrg.UserInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,8 @@ public class WebOrgAgendaContnroller {
      * @return
      */
     @DeleteMapping("/deleteOrgAgendaByOne")
-    public ResponseEntity deleteOrgAgenda(HttpSession session,@RequestParam("agendaId") String Id){
+    public ResponseEntity deleteOrgAgenda(HttpSession session,
+                                          @RequestParam("agendaId") String Id){
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null) {
             int i = webOrgAgendaService.deleteOrgAgendaByOne(userInfo,Id);
@@ -122,16 +124,14 @@ public class WebOrgAgendaContnroller {
     /**
      * 查询制定用户的日程信息
      * @param session
-     * @param memberId
      * @return
      */
     @RequestMapping("/fetchCalendar")
     @ResponseBody
-    public ResponseEntity selectByMemberIdAndDate(HttpSession session,
-                                        @RequestParam("memberId") Integer memberId){
+    public ResponseEntity selectByMemberIdAndDate(HttpSession session, ScheduleList scheduleList){
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null) {
-            return webOrgAgendaService.selectByMemberIdAndDate(userInfo,memberId);
+            return ResponseEntityUtil.success(webOrgAgendaService.selectByMemberIdAndDate(userInfo,scheduleList)) ;
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }

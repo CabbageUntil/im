@@ -37,6 +37,8 @@ public class WebUserServiceImpl implements WebUserService {
             UserInfo userInfo = new UserInfo();
             userInfo.setUsername(responseEntity.getData().getMobile());
             userInfo.setRole("visitor");
+            userInfo.setToken(responseEntity.getData().getToken());
+            System.out.println("登录系统时返回的token------------------>>"+responseEntity.getData().getToken());
             userInfo.setName(responseEntity.getData().getNickname());
             userInfo.setAvatar(responseEntity.getData().getAvatar());
             session.setAttribute(UserInfoEnum.USERINFO, userInfo);

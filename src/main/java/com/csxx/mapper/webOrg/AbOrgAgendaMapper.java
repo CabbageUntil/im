@@ -48,6 +48,6 @@ public interface AbOrgAgendaMapper {
      * 根据用户编号和时间查询用户日程信息
      * @return
      */
-    List<ScheduleList> selectByMemberIdAndDate(@Param("memberId") Integer memberId);
+    List<ScheduleList> selectByMemberIdAndDate(AbOrgAgenda abOrgAgenda);
 
 }

@@ -1,5 +1,6 @@
 package com.csxx.service.webOrg;
 
+import com.csxx.utils.ScheduleList;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.common.TableDTO;
 import com.csxx.vo.webOrg.UserInfo;
@@ -63,5 +64,5 @@ public interface WebOrgAgendaService {
      * @param memberId
      * @return
      */
-    ResponseEntity selectByMemberIdAndDate(UserInfo info,Integer memberId);
+    TableDTO selectByMemberIdAndDate(UserInfo info, ScheduleList scheduleList);
 }

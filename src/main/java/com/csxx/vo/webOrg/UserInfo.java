@@ -25,6 +25,8 @@ public class UserInfo {
 
     private String memberName;
 
+    private String token;
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -36,6 +38,7 @@ public class UserInfo {
                 ", memberId=" + memberId +
                 ", orgName='" + orgName + '\'' +
                 ", memberName='" + memberName + '\'' +
+                ", token='" + token + '\'' +
                 '}';
     }
 }

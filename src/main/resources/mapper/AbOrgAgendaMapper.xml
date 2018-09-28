@@ -51,14 +51,17 @@
   </select>
 
   <!--查询个人的日程信息-->
-  <select id="selectByMemberIdAndDate" resultMap="ScheduleList" parameterType="java.lang.Integer" >
+  <select id="selectByMemberIdAndDate" resultMap="ScheduleList" parameterType="com.csxx.dao.webOrg.AbOrgAgenda" >
     SELECT  (CAST(abg.note2 as nvarchar(MAX))+CAST(abg.note3 as nvarchar(MAX)) ) content,
       abg.arrange_date,
       abg.agenda_id,
       abg.note1
       FROM ab_org_agenda_tab abg
-    WHERE abg.org_id = 1
-    AND abg.member_id = 1
+    WHERE abg.org_id = #{orgId}
+    AND abg.member_id = #{memberId}
+    <if test="startDate!=null and endDate!=null">
+    AND  abg.arrange_date between   #{startDate} AND  #{endDate}
+    </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from ab_org_agenda_tab
