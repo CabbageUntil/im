@@ -18,6 +18,7 @@ import com.csxx.mapper.webOrg.AbMemberDetailMapper;
 import com.csxx.mapper.webOrg.AbMemberMapper;
 import com.csxx.repository.webOrg.MapRepository;
 import com.csxx.service.webOrg.WebMemberService;
+import com.csxx.utils.AnimalUtils;
 import com.csxx.utils.DateUtils;
 import com.csxx.utils.ResponseEntityUtil;
 import com.csxx.utils.memList;
@@ -211,11 +212,8 @@ public class WebMemberServiceImpl implements WebMemberService{
 
     /**
      * 保存信息的实现
-     *
      * 1.属性复制得到用户基本信息 abMember
-     *
      * 2.获取用户的id编号，同时将对应编号对应的详细信息删除
-     *
      * 3.重新添加用户的详细信息
      *
      * @param user
@@ -233,6 +231,14 @@ public class WebMemberServiceImpl implements WebMemberService{
         abMember.setMemberId(jionComForm.getId());
         abMember.setBirthday(DateUtils.forMatter(jionComForm.getBirthday()));
         abMember.setIdCardExp(DateUtils.forMatter(jionComForm.getIdCardExp()));
+        /**
+         * 通过选择生日获取生肖
+         */
+        Date a = DateUtils.forMatter(jionComForm.getBirthday());
+        String date = AnimalUtils.formateDate(a);
+        Byte animal = Byte.valueOf(AnimalUtils.getAnimal(date));
+        abMember.setAnimal(animal);
+
         /**
          * 清空用户对应的详细信息
          */

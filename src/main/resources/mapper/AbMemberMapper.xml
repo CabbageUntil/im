@@ -434,7 +434,6 @@
 		from ab_member_tab amt
 		inner join ab_dept_tab adt
 		on amt.dept_id = adt.dept_id
-		and amt.org_id = adt.org_id
 		inner join ab_post_tab apt
 		on amt.post_id = apt.post_id
 		where amt.member_status = #{status}
@@ -451,7 +450,6 @@
     from ab_member_tab amt
     inner join ab_dept_tab adt
     on amt.dept_id = adt.dept_id
-    and amt.org_id = adt.org_id
     inner join ab_post_tab apt
     on amt.post_id = apt.post_id
     where  amt.org_id = #{orgId}

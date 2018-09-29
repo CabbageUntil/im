@@ -42,7 +42,7 @@ web-contact:
   domain: localhost
   expireTime: 86400
   loginPage: http://localhost:8091/contactWeb/#/login
-  logoutPage: https://passport.dianchat.net/pass/logout?callback=https://passport.dianchat.net/pass/service_login?callback=http://localhost:8090/im/webOrg/login
+  logoutPage: https://passport.dianchat.net/pass/logout?callback=https://passport.dianchat.net/pass/service_login?callback=http://localhost:8092/org/login
   webContactPage: http://localhost:8088/im/webContatcs/api/list?
   webContactDelPage: http://localhost:8088/im/webContatcs/api/get_delete_list?
 

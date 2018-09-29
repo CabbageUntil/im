@@ -12,6 +12,7 @@ import com.csxx.dao.webOrg.AbMemberDetail;
 import com.csxx.dao.webOrg.AbOrg;
 import com.csxx.dto.webOrg.form.CreateComForm;
 import com.csxx.dto.webOrg.form.JoinComForm;
+import com.csxx.dto.webOrg.form.LabelValue;
 import com.csxx.dto.webOrg.form.UserArchiveForm;
 import com.csxx.enums.common.ResultEnum;
 import com.csxx.exception.BizException;
@@ -19,6 +20,7 @@ import com.csxx.mapper.webOrg.AbMemberDetailMapper;
 import com.csxx.mapper.webOrg.AbMemberMapper;
 import com.csxx.mapper.webOrg.AbOrgMapper;
 import com.csxx.service.webOrg.WebCompanyService;
+import com.csxx.utils.AnimalUtils;
 import com.csxx.utils.DateUtils;
 import com.csxx.vo.common.TableDTO;
 import com.github.pagehelper.PageHelper;
@@ -251,10 +253,15 @@ public class WebCompanyServiceImpl implements WebCompanyService {
          */
         abMember.setBirthday(DateUtils.forMatter(jionComForm.getBirthday()));
         abMember.setIdCardExp(DateUtils.forMatter(jionComForm.getIdCardExp()));
+        /**
+         * 通过选择生日获取生肖
+         */
+        Date a = DateUtils.forMatter(jionComForm.getBirthday());
+        String date = AnimalUtils.formateDate(a);
+        Byte animal = Byte.valueOf(AnimalUtils.getAnimal(date));
+        abMember.setAnimal(animal);
 
-        /*abMember.setOrgId(abOrg.getOrgId());*/
         abMember.setAnimal(jionComForm.getSybolicAnimal());
-
         abMember.setMemberStatus(new Byte("1"));
         abMember.setApplicateDate(new Date());
         abMember.setEntryDate(new Date());
@@ -282,6 +289,11 @@ public class WebCompanyServiceImpl implements WebCompanyService {
                 jionComForm.getOtherList(), "other", abMember.getMemberId()));
         abMemberDetailMapper.batchInsert(abMemberDetailList);
     }
+
+
+
+
+
     /**
      * 创建公司
      * @param  user 关联登录账号
@@ -309,9 +321,17 @@ public class WebCompanyServiceImpl implements WebCompanyService {
         UserArchiveForm archiveForm = JSON.parseObject(userInfo,UserArchiveForm.class);
         archiveForm.setTelList(archiveForm.getPhoneList());
         BeanUtils.copyProperties(archiveForm, abMember);
+        /**
+         * 生肖
+         */
+        String date = AnimalUtils.formateDate(archiveForm.getBirthday());
+        Byte animal = Byte.valueOf(AnimalUtils.getAnimal(date));
+        abMember.setAnimal(animal);
+
+        abMember.setPostId(1002);//赋予公司职位：公司创始人
+        abMember.setDeptId(3013);//部门信息：总裁办
         abMember.setOrgId(abOrg.getOrgId());
         abMember.setOnenetOwner(user);
-        abMember.setAnimal(archiveForm.getSybolicAnimal());
         abMember.setMemberStatus(new Byte("1"));
         abMember.setApplicateDate(new Date());
         abMember.setEntryDate(new Date());
@@ -320,14 +340,18 @@ public class WebCompanyServiceImpl implements WebCompanyService {
          * 保存用户详细信息
          */
         List<AbMemberDetail> abMemberDetailList = new ArrayList<>();
+        List<LabelValue> address = archiveForm.getAddressList();
+        List<LabelValue> email = archiveForm.getEmailList();
+        List<LabelValue> tel = archiveForm.getTelList();
+        List<LabelValue> other = archiveForm.getOtherList();
         abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                archiveForm.getAddressList(), "address", abMember.getMemberId()));
+                address, "address", abMember.getMemberId()));
         abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                archiveForm.getEmailList(), "email", abMember.getMemberId()));
+                email, "email", abMember.getMemberId()));
         abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                archiveForm.getTelList(), "tel", abMember.getMemberId()));
+                tel, "tel", abMember.getMemberId()));
         abMemberDetailList.addAll(LabelValue2AbMemberDetail.convertToList(
-                archiveForm.getOtherList(), "other", abMember.getMemberId()));
+                other, "other", abMember.getMemberId()));
         abMemberDetailMapper.batchInsert(abMemberDetailList);
     }
 }

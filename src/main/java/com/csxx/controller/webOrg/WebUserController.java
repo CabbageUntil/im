@@ -38,7 +38,7 @@ public class WebUserController {
     @PostMapping("/loginCom")
     public ResponseEntity loginCom(HttpSession session,
                                    Integer orgId) {
-        UserInfo userInfo = (UserInfo)session.getAttribute(UserInfoEnum.USERINFO);
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
         if (userInfo != null) {
             return webUserService.loginCom(session, userInfo, orgId);
         } else {
@@ -48,7 +48,7 @@ public class WebUserController {
 
     @GetMapping("getUserInfo")
     public ResponseEntity getUserInfo(HttpSession session) {
-        UserInfo userInfo = (UserInfo)session.getAttribute(UserInfoEnum.USERINFO);
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
         if (userInfo != null) {
             return ResponseEntityUtil.success(userInfo);
         } else {
@@ -64,7 +64,7 @@ public class WebUserController {
 
     @PostMapping("/logoutCom")
     public ResponseEntity logoutCom(HttpSession session) {
-        UserInfo userInfo = (UserInfo)session.getAttribute(UserInfoEnum.USERINFO);
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
         if (userInfo != null && userInfo.getMemberId() != null) {
             webUserService.logoutCom(session, userInfo);
             return ResponseEntityUtil.success();
@@ -77,7 +77,7 @@ public class WebUserController {
     public ResponseEntity validRepeat(HttpSession session,
                                       String type,
                                       String value) {
-        UserInfo userInfo = (UserInfo)session.getAttribute(UserInfoEnum.USERINFO);
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
         if (userInfo != null) {
             if (webCompanyService.validRepeat(value, type)) {
                 return ResponseEntityUtil.success();
@@ -89,4 +89,11 @@ public class WebUserController {
         }
     }
 
+    @PostMapping("/getServer")
+    public ResponseEntity getServer(HttpSession session) {
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
+        String token = userInfo.getToken();
+        System.out.println("查询指令=========================================>>>>>" +token);
+        return ResponseEntityUtil.success();
+    }
 }

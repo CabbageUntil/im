@@ -46,8 +46,6 @@ public class UserArchiveForm implements Serializable {
 
     private List<LabelValue> otherList;
 
-    private  Byte sybolicAnimal;
-
     private String idCard;
 
     private String blankId;
@@ -56,4 +54,27 @@ public class UserArchiveForm implements Serializable {
 
     private String nativePlace;
 
+    @Override
+    public String toString() {
+        return "UserArchiveForm{" +
+                "memberName='" + memberName + '\'' +
+                ", education=" + education +
+                ", maritalStatus=" + maritalStatus +
+                ", sex=" + sex +
+                ", animal=" + animal +
+                ", birthday=" + birthday +
+                ", idCardExp=" + idCardExp +
+                ", emergencyUser='" + emergencyUser + '\'' +
+                ", emergencyMobile='" + emergencyMobile + '\'' +
+                ", telList=" + telList +
+                ", phoneList=" + phoneList +
+                ", emailList=" + emailList +
+                ", addressList=" + addressList +
+                ", otherList=" + otherList +
+                ", idCard='" + idCard + '\'' +
+                ", blankId='" + blankId + '\'' +
+                ", blankName='" + blankName + '\'' +
+                ", nativePlace='" + nativePlace + '\'' +
+                '}';
+    }
 }
