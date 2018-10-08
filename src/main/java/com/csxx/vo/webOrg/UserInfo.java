@@ -27,6 +27,9 @@ public class UserInfo {
 
     private String token;
 
+    //登录状态
+
+    private String code;
     @Override
     public String toString() {
         return "UserInfo{" +

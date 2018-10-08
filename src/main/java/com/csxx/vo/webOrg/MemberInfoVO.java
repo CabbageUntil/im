@@ -104,5 +104,9 @@ public class MemberInfoVO {
     private String idCard;
     private String blankId;
     private String blankName;
+    /**
+     * 员工的onenet_owner账号
+     */
+    private String onenetOwner;
 
 }

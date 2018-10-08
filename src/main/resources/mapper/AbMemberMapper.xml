@@ -93,6 +93,8 @@
 		<result column="id_card" property="idCard"/>
 		<result column="blank_id" property="blankId"/>
 		<result column="blank_name" property="blankName"/>
+		<result column="onenet_owner" property="onenetOwner"/>
+
 	</resultMap>
 	<!-- 结果集 END -->
 
@@ -430,7 +432,7 @@
 		select amt.member_id, amt.member_name, adt.dept_name, apt.post_name, amt.education, amt.marital_status,
 						amt.sex, amt.birthday, amt.id_card_exp, amt.native_place, amt.animal, amt.emergency_user,
 						amt.emergency_mobile, amt.applicate_date, amt.entry_date, amt.leave_date, amt.member_status,
-                        amt.id_card, amt.blank_id, amt.blank_name
+                        amt.id_card, amt.blank_id, amt.blank_name, amt.onenet_owner
 		from ab_member_tab amt
 		inner join ab_dept_tab adt
 		on amt.dept_id = adt.dept_id
@@ -446,7 +448,7 @@
     select amt.member_id, amt.member_name, adt.dept_name, apt.post_name, amt.education, amt.marital_status,
     amt.sex, amt.birthday, amt.id_card_exp, amt.native_place, amt.animal, amt.emergency_user,
     amt.emergency_mobile, amt.applicate_date, amt.entry_date, amt.leave_date, amt.member_status,
-    amt.id_card, amt.blank_id, amt.blank_name
+    amt.id_card, amt.blank_id, amt.blank_name,amt.onenet_owner
     from ab_member_tab amt
     inner join ab_dept_tab adt
     on amt.dept_id = adt.dept_id
