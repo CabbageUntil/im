@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csxx.mapper.webOrg.AbGroupMapper" >
+    <resultMap id="BaseResultMap" type="com.csxx.dao.webOrg.AbGroup" >
+        <constructor >
+            <arg column="group_id" jdbcType="NVARCHAR" javaType="java.lang.String" />
+            <arg column="name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+            <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+            <arg column="create_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+            <arg column="remove_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+        </constructor>
+    </resultMap>
+    <resultMap id="groupList" type="com.csxx.dao.webOrg.AbGroup">
+        <id property="groupId" column="group_id" />
+        <result property="name" column="name" />
+        <result property="status" column="status" />
+        <result property="createDate" column="create_date" />
+        <result property="removeDate" column="remove_date" />
+    </resultMap>
+    <resultMap id="ListMapper" type="com.csxx.utils.groupList">
+        <id property="groupId" column="group_id" />
+        <result property="name" column="name" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        group_id,name,status,create_date,remove_date
+    </sql>
+    <!--根据群编号查询群信息-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List" />
+        from ab_group_tab
+        where group_id = #{groupId,jdbcType=NVARCHAR}
+    </select>
+    <!-- 查询还没有加入的分组列表 -->
+    <select id="selectGroupList" resultMap="ListMapper" parameterType="java.lang.String">
+        select a.group_id,a.name  from ab_group_tab a
+        left join ab_member_and_group_tab b
+        on a.group_id = b.group_id
+        left join ab_group_member_tab c
+        on b.group_member_id = c.group_member_id
+        where c.mebile  &lt;&gt; #{aa,jdbcType=NVARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from ab_group_tab
+        where group_id = #{groupId,jdbcType=NVARCHAR}
+    </delete>
+    <!--添加群组信息(所有字段添加  没有值可能会默认null)-->
+    <insert id="insert" parameterType="com.csxx.dao.webOrg.AbGroup" >
+    insert into ab_group_tab (
+     group_id,
+     name,
+     status,
+     create_date,
+     remove_date
+    )
+    values (
+      #{groupId,jdbcType=NVARCHAR},
+      #{name,jdbcType=NVARCHAR},
+      #{status,jdbcType=TINYINT},
+      #{createDate,jdbcType=TIMESTAMP},
+      #{removeDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+     <!-- 选择添加属性数据 -->
+    <insert id="insertSelective" parameterType="com.csxx.dao.webOrg.AbGroup" >
+        insert into ab_group_tab
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="groupId  != null" >
+                group_id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="createDate != null" >
+                create_date,
+            </if>
+            <if test="removeDate != null" >
+                remove_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="groupId != null" >
+                #{groupId,jdbcType=NVARCHAR},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=NVARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createDate != null" >
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="removeDate != null" >
+                #{removeDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <!--根据群编号更新群信息-->
+    <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbGroup" >
+        update ab_group_tab
+        <set >
+            <if test="name != null" >
+                name = #{name,jdbcType=NVARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reomveDate != null" >
+                remove_date = #{removeDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where group_id = #{groupId,jdbcType=NVARCHAR}
+    </update>
+    <!--更新群的信息,注意没有传值时，默认保存空值-->
+    <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbGroup" >
+    update
+      ab_group_tab
+    set
+      name = #{name,jdbcType=NVARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      remove_date = #{removeDate,jdbcType=TIMESTAMP}
+    where
+      group_id = #{groupId,jdbcType=NVARCHAR},
+  </update>
+</mapper>

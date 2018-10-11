@@ -9,7 +9,7 @@ import java.util.Random;
  * time:2018年8月29日18:01:57
  * 作用：ID生成器
  */
-public class NumberUtil<main> {
+public class NumberUtil {
     public static String newNumberID() {
         StringBuilder sb = new StringBuilder();
         Date date = new Date();

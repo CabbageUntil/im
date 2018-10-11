@@ -274,7 +274,6 @@ public class WebCompanyServiceImpl implements WebCompanyService {
         abMember.setApplicateDate(new Date());
         abMember.setEntryDate(new Date());
         abMemberMapper.insertSelective(abMember);
-        int i =1;
         /**
          * 添加用户后添加用户详细信息
          */
