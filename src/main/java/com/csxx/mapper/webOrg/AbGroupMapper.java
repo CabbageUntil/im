@@ -54,5 +54,9 @@ public interface AbGroupMapper {
      * @return
      */
     List<groupList> selectGroupList(@Param(value = "aa") String mebile);
+    /**
+     * 查询已经添加的群组的信息
+     */
+    List<AbGroup> joinGroup(AbGroup abGroup);
 
 }

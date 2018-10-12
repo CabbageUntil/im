@@ -1,7 +1,10 @@
 package com.csxx.service.webOrg;
 
+import com.csxx.dao.webOrg.AbGroup;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.UserInfo;
+
+import java.util.List;
 
 public interface WebGroupService {
     /**
@@ -19,4 +22,18 @@ public interface WebGroupService {
      * @return
      */
     ResponseEntity selectGroupList(UserInfo userInfo);
+
+    /**
+     * 加入分组的功能
+     * @param userInfo
+     * @param groupId
+     */
+    void  joinGroup(UserInfo userInfo,String groupId,String userName);
+
+    /**
+     * 查询已经有群组信息
+     * @param userInfo
+     * @return
+     */
+    ResponseEntity joinGroupList(UserInfo userInfo);
 }

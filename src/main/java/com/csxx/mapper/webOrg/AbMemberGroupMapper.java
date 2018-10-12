@@ -50,4 +50,10 @@ public interface AbMemberGroupMapper {
      */
     List<AbGroupMember> findGroupMember(AbGroupMember abGroupMember) ;
 
+    /**
+     * 获取成员的编号信息
+     * @param mebile
+     * @return
+     */
+     AbGroupMember getMemberId(String mebile);
 }

@@ -5,6 +5,8 @@
         <constructor >
             <arg column="group_member_id" jdbcType="NVARCHAR" javaType="java.lang.String" />
             <arg column="group_id" jdbcType="NVARCHAR" javaType="java.lang.String" />
+            <arg column="member_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+            <arg column="member_role" jdbcType="TINYINT" javaType="java.lang.Byte" />
         </constructor>
     </resultMap>
     <!-- 根据群编号删除群关系 -->
@@ -22,10 +24,14 @@
     insert into
         ab_member_and_group_tab (
           group_id,
-          group_member_id
+          group_member_id,
+          member_status,
+          member_role
         )
     values (
     #{groupId,jdbcType=NVARCHAR},
-    #{groupMemberId,jdbcType=NVARCHAR})
+    #{groupMemberId,jdbcType=NVARCHAR},
+    #{memberStatus,jdbcType=TINYINT},
+    #{memberRole,jdbcType=TINYINT})
   </insert>
 </mapper>

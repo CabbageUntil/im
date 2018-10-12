@@ -12,4 +12,6 @@ import java.util.Date;
 public class AbGroupAndMember {
     private String groupMemberId;//群成员编号
     private String groupId;//群编号
+    private Byte memberStatus;//成员状态信息
+    private Byte memberRole;//成员角色
 }

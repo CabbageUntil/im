@@ -1,5 +1,6 @@
 package com.csxx.controller.webOrg;
 
+import com.csxx.dao.webOrg.AbGroup;
 import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.UserInfoEnum;
 import com.csxx.service.webOrg.WebGroupService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * 群组管理
@@ -48,6 +50,24 @@ public class WebGroupController {
     }
 
     /**
+     * 加入分组功能
+     * @param session
+     * @return
+     */
+    @PostMapping("/joinGroup")
+    public ResponseEntity joinGroup(HttpSession session,
+                                    @RequestParam("groupId") String groupId,
+                                    @RequestParam("userName") String userName){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+            webGroupService.joinGroup(userInfo,groupId,userName);
+            return ResponseEntityUtil.success();
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+
+    /**
      * 查询群组信息
      * @param session
      * @return
@@ -57,6 +77,15 @@ public class WebGroupController {
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null) {
             return webGroupService.selectGroupList(userInfo);
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+    @PostMapping("/joinGroupList")
+    public ResponseEntity joinGroupList(HttpSession session){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+            return webGroupService.joinGroupList(userInfo);
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }

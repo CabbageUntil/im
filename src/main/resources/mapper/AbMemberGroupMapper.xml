@@ -3,8 +3,6 @@
 <mapper namespace="com.csxx.mapper.webOrg.AbMemberGroupMapper" >
     <resultMap id="BaseResultMap" type="com.csxx.dao.webOrg.AbGroupMember" >
         <constructor >
-            <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
-            <arg column="group_role" jdbcType="TINYINT" javaType="java.lang.Byte" />
             <arg column="group_member_id" jdbcType="NVARCHAR" javaType="java.lang.String" />
             <arg column="name" jdbcType="NVARCHAR" javaType="java.lang.String" />
             <arg column="mebile" jdbcType="NVARCHAR" javaType="java.lang.String" />
@@ -17,21 +15,33 @@
         <id property="groupMemberId" column="group_member_id" />
         <result property="name" column="name" />
         <result property="mebile" column="mebile" />
-        <result property="groupRole" column="group_role" />
-        <result property="status" column="status" />
         <result property="applicateDate" column="applicate_date" />
         <result property="verifyDate" column="verify_date" />
         <result property="applicateRemark" column="applicate_remark" />
     </resultMap>
+    <resultMap id="getMemberId" type="com.csxx.dao.webOrg.AbGroupMember">
+        <id property="groupMemberId" column="group_member_id" />
+    </resultMap>
     <sql id="Base_Column_List" >
-        group_member_id,name,mebile,group_role,status,applicate_date,verify_date,applicate_remark
+        group_member_id,name,mebile,applicate_date,verify_date,applicate_remark
     </sql>
+
     <!--查询群成员信息-->
     <select id="findGroupMember" resultMap="groupList" parameterType="com.csxx.dao.webOrg.AbGroupMember"  >
         select
         <include refid="Base_Column_List" />
         from ab_group_member_tab where 1=1
     </select>
+
+    <!--查询群成员编号信息-->
+    <select id="getMemberId"  resultMap="getMemberId"  parameterType="java.lang.String"  >
+        select
+          group_member_id
+        from
+          ab_group_member_tab
+        where mebile =  #{mebile,jdbcType=NVARCHAR}
+    </select>
+
     <!-- 根据成员编号删除成员信息 -->
     <delete id="deleteByGroupMemberId" parameterType="java.lang.String">
       delete from
@@ -39,6 +49,8 @@
       where
         group_member_id = #{groupMemberId,jdbcType=NVARCHAR}
     </delete>
+
+
     <!-- 添加群成员信息 -->
     <insert id="insert" parameterType="com.csxx.dao.webOrg.AbGroupMember" >
         insert into
@@ -48,9 +60,7 @@
               mebile,
               applicate_remark
               applicreate_date,
-              verify_date,
-              status,
-              group_role
+              verify_date
           )
         values (
             #{groupMemberId,jdbcType=NVARCHAR},
@@ -59,10 +69,10 @@
             #{applicateRemark,jdbcType=NVARCHAR},
             #{applicateDate,jdbcType=TIMESTAMP},
             #{verifyDate,jdbcType=TIMESTAMP},
-            #{status,jdbcType=TINYINT},
-            #{groupRole,jdbcType=TINYINT}
         )
     </insert>
+
+
      <!-- 选择添加成员信息-->
     <insert id="insertSelective" parameterType="com.csxx.dao.webOrg.AbGroupMember" >
         insert into ab_group_member_tab
@@ -78,12 +88,6 @@
             </if>
             <if test="applicateRemark != null" >
                 applicate_remark,
-            </if>
-            <if test="groupRole != null" >
-                group_role,
-            </if>
-            <if test="status != null" >
-                status,
             </if>
             <if test="applicateDate != null" >
                 applicate_date,
@@ -105,12 +109,6 @@
             <if test="applicateRemark != null" >
                 #{applicateRemark,jdbcType=NVARCHAR},
             </if>
-            <if test="groupRole != null" >
-                #{groupRole,jdbcType=TINYINT},
-            </if>
-            <if test="status != null" >
-                #{status,jdbcType=TINYINT},
-            </if>
             <if test="applicateDate != null" >
                 #{applicateDate,jdbcType=TIMESTAMP},
             </if>
@@ -119,6 +117,7 @@
             </if>
         </trim>
     </insert>
+
 
     <!--选择性更新信息-->
     <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbGroupMember" >
@@ -137,14 +136,6 @@
                 #{applicateRemark,jdbcType=NVARCHAR},
             </if>
 
-            <if test="groupRole != null" >
-                #{groupRole,jdbcType=TINYINT},
-            </if>
-            <if test="status != null" >
-                #{status,jdbcType=TINYINT},
-            </if>
-
-
             <if test="applicateDate != null" >
                 #{applicateDate,jdbcType=TIMESTAMP},
             </if>
@@ -154,11 +145,12 @@
         </set>
         where group_member_id = #{groupMemberId,jdbcType=NVARCHAR}
     </update>
+
+
      <!-- 审核申请的成员 -->
     <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbGroupMember" >
     update ab_group_member_tab
     set
-      status = #{status,jdbcType=TINYINT},
       verify_date = #{verifyDate,jdbcType=TIMESTAMP}
     where group_member_id = #{groupMemberId,jdbcType=NVARCHAR}
   </update>

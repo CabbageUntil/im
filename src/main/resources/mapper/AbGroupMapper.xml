@@ -31,14 +31,31 @@
         from ab_group_tab
         where group_id = #{groupId,jdbcType=NVARCHAR}
     </select>
+
+    <select id="joinGroup" resultMap="groupList" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List" />
+        from ab_group_tab
+        where 1=1
+    </select>
+
+
     <!-- 查询还没有加入的分组列表 -->
     <select id="selectGroupList" resultMap="ListMapper" parameterType="java.lang.String">
-        select a.group_id,a.name  from ab_group_tab a
-        left join ab_member_and_group_tab b
-        on a.group_id = b.group_id
-        left join ab_group_member_tab c
-        on b.group_member_id = c.group_member_id
-        where c.mebile  &lt;&gt; #{aa,jdbcType=NVARCHAR}
+        SELECT
+            a.group_id,a.name
+        FROM
+            ab_group_tab a
+        WHERE
+            a.group_id NOT IN (
+            SELECT
+                b.group_id
+            FROM
+                ab_member_and_group_tab b
+                LEFT JOIN ab_group_member_tab c ON b.group_member_id = c.group_member_id
+            WHERE
+            mebile = #{aa,jdbcType=NVARCHAR}
+            )
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
