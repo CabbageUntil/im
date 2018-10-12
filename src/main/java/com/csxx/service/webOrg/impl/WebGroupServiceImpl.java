@@ -160,9 +160,21 @@ public class WebGroupServiceImpl implements WebGroupService {
      */
     @Override
     public ResponseEntity joinGroupList(UserInfo userInfo) {
-        AbGroup abGroup = new AbGroup();
         TableDTO<AbGroup> tableDTO;
-        List<AbGroup> allDept  = abGroupMapper.joinGroup(abGroup);
+        List<AbGroup> allDept  = abGroupMapper.joinGroup(userInfo.getUsername());
+        PageInfo<AbGroup> pageInfo = new PageInfo<>(allDept);
+        tableDTO = PageInfo2TableDTO.convert(pageInfo,null);
+        return ResponseEntityUtil.success(tableDTO);
+    }
+    /**
+     * 查询创建群组
+     * @param userInfo
+     * @return
+     */
+    @Override
+    public ResponseEntity createGroupList(UserInfo userInfo) {
+        TableDTO<AbGroup> tableDTO;
+        List<AbGroup> allDept  = abGroupMapper.cresatGroupList(userInfo.getUsername());
         PageInfo<AbGroup> pageInfo = new PageInfo<>(allDept);
         tableDTO = PageInfo2TableDTO.convert(pageInfo,null);
         return ResponseEntityUtil.success(tableDTO);

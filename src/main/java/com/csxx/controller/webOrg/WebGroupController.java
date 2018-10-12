@@ -81,11 +81,31 @@ public class WebGroupController {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }
     }
+
+    /**
+     * 查询加入分组的信息
+     * @param session
+     * @return
+     */
     @PostMapping("/joinGroupList")
     public ResponseEntity joinGroupList(HttpSession session){
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null) {
             return webGroupService.joinGroupList(userInfo);
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+    /**
+     * 查询加入创建分组的信息
+     * @param session
+     * @return
+     */
+    @PostMapping("/createGroupList")
+    public ResponseEntity createGroupList(HttpSession session){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+            return webGroupService.createGroupList(userInfo);
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }

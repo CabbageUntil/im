@@ -36,4 +36,11 @@ public interface WebGroupService {
      * @return
      */
     ResponseEntity joinGroupList(UserInfo userInfo);
+
+    /**
+     * 查询创建群组信息
+     * @param userInfo
+     * @return
+     */
+    ResponseEntity createGroupList(UserInfo userInfo);
 }

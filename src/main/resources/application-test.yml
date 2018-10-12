@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://10.21.10.1:1433;DatabaseName=freehost
+    url: jdbc:sqlserver://110.165.41.37:1433;DatabaseName=freehost
     username: user_freehost
     password: abcd1234@
   jpa:

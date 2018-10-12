@@ -57,6 +57,10 @@ public interface AbGroupMapper {
     /**
      * 查询已经添加的群组的信息
      */
-    List<AbGroup> joinGroup(AbGroup abGroup);
+    List<AbGroup> joinGroup(@Param(value = "aa") String mebile);
 
+    /**
+     * 查询已经添加的群组的信息
+     */
+    List<AbGroup> cresatGroupList(@Param(value = "aa") String mebile);
 }

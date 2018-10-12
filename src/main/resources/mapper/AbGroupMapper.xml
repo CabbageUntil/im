@@ -32,13 +32,43 @@
         where group_id = #{groupId,jdbcType=NVARCHAR}
     </select>
 
+    <!--查询已经加入的分组清单-->
     <select id="joinGroup" resultMap="groupList" parameterType="java.lang.String">
-        select
+        SELECT
         <include refid="Base_Column_List" />
-        from ab_group_tab
-        where 1=1
+        FROM
+        ab_group_tab a
+        WHERE
+        a.group_id  IN (
+        SELECT
+        b.group_id
+        FROM
+        ab_member_and_group_tab b
+        LEFT JOIN ab_group_member_tab c ON b.group_member_id = c.group_member_id
+        WHERE
+        b.member_role  &lt;&gt; 0
+        and mebile = #{aa,jdbcType=NVARCHAR}
+        )
     </select>
 
+    <!--查询创建的分组的信息 -->
+    <select id="cresatGroupList" resultMap="groupList" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        ab_group_tab a
+        WHERE
+        a.group_id  IN (
+        SELECT
+        b.group_id
+        FROM
+        ab_member_and_group_tab b
+        LEFT JOIN ab_group_member_tab c ON b.group_member_id = c.group_member_id
+        WHERE
+        b.member_role = 2
+        and c.mebile = #{aa,jdbcType=NVARCHAR}
+        )
+    </select>
 
     <!-- 查询还没有加入的分组列表 -->
     <select id="selectGroupList" resultMap="ListMapper" parameterType="java.lang.String">
