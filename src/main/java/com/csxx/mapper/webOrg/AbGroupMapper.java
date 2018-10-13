@@ -2,6 +2,7 @@ package com.csxx.mapper.webOrg;
 
 import com.csxx.dao.webOrg.AbGroup;
 import com.csxx.utils.groupList;
+import com.csxx.vo.webOrg.GroupMemberInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -63,4 +64,12 @@ public interface AbGroupMapper {
      * 查询已经添加的群组的信息
      */
     List<AbGroup> cresatGroupList(@Param(value = "aa") String mebile);
+
+    /**
+     * 登录时查找成员信息(姓名，群名，角色编号)
+     * 参数：手机号和群号
+     * @return
+     */
+    GroupMemberInfo selectGroupMemberByMebileAndGroupId(@Param(value="groupId") String groupId,
+                                                        @Param(value="mebile") String mebile);
 }

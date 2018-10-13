@@ -1,14 +1,18 @@
 package com.csxx.service.webOrg.impl;
 
 import com.csxx.bo.unifiedLogin.ValidResponseEntity;
+import com.csxx.dao.webOrg.AbGroupMember;
 import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.MemberStatusEnum;
 import com.csxx.enums.webOrg.UserInfoEnum;
+import com.csxx.mapper.webOrg.AbGroupMapper;
+import com.csxx.mapper.webOrg.AbMemberGroupMapper;
 import com.csxx.mapper.webOrg.AbMemberMapper;
 import com.csxx.service.unifiedLogin.UnifiedLoginService;
 import com.csxx.service.webOrg.WebUserService;
 import com.csxx.utils.ResponseEntityUtil;
 import com.csxx.vo.common.ResponseEntity;
+import com.csxx.vo.webOrg.GroupMemberInfo;
 import com.csxx.vo.webOrg.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +26,8 @@ public class WebUserServiceImpl implements WebUserService {
 
     private final UnifiedLoginService unifiedLoginService;
     private final AbMemberMapper abMemberMapper;
-
+    @Autowired
+    private AbGroupMapper abGroupMapper;
     @Autowired
     public WebUserServiceImpl(UnifiedLoginService unifiedLoginService, AbMemberMapper abMemberMapper) {
         this.unifiedLoginService = unifiedLoginService;
@@ -78,6 +83,32 @@ public class WebUserServiceImpl implements WebUserService {
         } else {
             log.error("登录公司失败，userInfo={}，orgId={}", userInfo, orgId);
             return ResponseEntityUtil.error(ResultEnum.ORG_LOGIN_FAIL.getCode(), "登录公司失败");
+        }
+    }
+
+    /**
+     * 登录分组
+     * 查询该成员拥有的角色、群组名称、姓名
+     *
+     * @param session
+     * @param userInfo
+     * @param groupId
+     * @return
+     */
+    @Override
+    public ResponseEntity loginGroup(HttpSession session, UserInfo userInfo, String groupId) {
+        GroupMemberInfo groupMemberInfo = abGroupMapper.selectGroupMemberByMebileAndGroupId(groupId,userInfo.getUsername());
+        if (groupMemberInfo != null) {
+            userInfo.setOrgName(groupMemberInfo.getGroupName());
+            userInfo.setMemberName(groupMemberInfo.getMemberName());
+            String role = groupMemberInfo.getMemberRole().equals("2")? "groupLeader":"groupMember";
+            userInfo.setRole(role);
+            userInfo.setGroupId(groupMemberInfo.getGroupId());
+            session.setAttribute(UserInfoEnum.USERINFO, userInfo);
+            return ResponseEntityUtil.success();
+        } else {
+            log.error("登录群组失败，userInfo={}，orgId={}", userInfo, groupId);
+            return ResponseEntityUtil.error(ResultEnum.ORG_LOGIN_FAIL.getCode(), "登录群组失败");
         }
     }
 

@@ -24,6 +24,16 @@ public interface WebUserService {
      */
     ResponseEntity loginCom(HttpSession session, UserInfo userInfo, Integer orgId);
 
+    /**
+     * 登录分组
+     * 查询该成员拥有的角色、群组名称、姓名
+     * @param session
+     * @param userInfo
+     * @param groupId
+     * @return
+     */
+    ResponseEntity loginGroup(HttpSession session, UserInfo userInfo, String groupId);
+
     void logoutCom(HttpSession session, UserInfo userInfo);
 
 }

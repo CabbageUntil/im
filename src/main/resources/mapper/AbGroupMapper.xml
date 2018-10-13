@@ -21,15 +21,37 @@
         <id property="groupId" column="group_id" />
         <result property="name" column="name" />
     </resultMap>
+    <resultMap id="GroupMemberInfo" type="com.csxx.vo.webOrg.GroupMemberInfo">
+        <result property="memberName" column="member_name" />
+        <result property="groupId" column="group_id" />
+        <result property="groupName" column="group_name" />
+        <result property="memberRole" column="member_role" />
+    </resultMap>
     <sql id="Base_Column_List" >
         group_id,name,status,create_date,remove_date
     </sql>
+
+
     <!--根据群编号查询群信息-->
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List" />
         from ab_group_tab
         where group_id = #{groupId,jdbcType=NVARCHAR}
+    </select>
+
+    <!-- 登录群组是获取群成员的信息 包含：群名称，姓名，角色-->
+    <select id="selectGroupMemberByMebileAndGroupId" resultMap="GroupMemberInfo" parameterType="java.lang.String">
+        select a.name member_name,c.name group_name,c.group_id group_id, b.member_role member_role  from ab_group_member_tab a
+            inner join  ab_member_and_group_tab b
+                on a.group_member_id = b.group_member_id
+            inner join ab_group_tab c
+                on c.group_id = b.group_id
+            where
+                c.group_id = #{groupId,jdbcType=NVARCHAR}
+            and
+                a.mebile = #{mebile,jdbcType=NVARCHAR}
+
     </select>
 
     <!--查询已经加入的分组清单-->

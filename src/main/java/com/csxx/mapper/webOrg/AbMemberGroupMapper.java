@@ -51,6 +51,13 @@ public interface AbMemberGroupMapper {
     List<AbGroupMember> findGroupMember(AbGroupMember abGroupMember) ;
 
     /**
+     *查询审核通过的群员的信息
+     * @param groupId
+     * @return
+     */
+    List<AbGroupMember> selectNotViewGroupList(@Param(value = "aa") String groupId);
+
+    /**
      * 获取成员的编号信息
      * @param mebile
      * @return

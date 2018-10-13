@@ -35,6 +35,12 @@ public class WebUserController {
         return webUserService.login(URLEncoder.encode(jwtToken, "utf-8"), session);
     }
 
+    /**
+     * 进入公司的方法
+     * @param session
+     * @param orgId
+     * @return
+     */
     @PostMapping("/loginCom")
     public ResponseEntity loginCom(HttpSession session,
                                    Integer orgId) {
@@ -46,6 +52,21 @@ public class WebUserController {
         }
     }
 
+    /**
+     * 查询群成员以及登录功能
+     * @param session
+     * @param groupId
+     * @return
+     */
+    @PostMapping("/loginGroup")
+    public ResponseEntity loginGroup(HttpSession session,String groupId){
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
+        if (userInfo != null) {
+            return webUserService.loginGroup(session, userInfo, groupId);
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN.getCode(), "需要登录");
+        }
+    }
     @GetMapping("getUserInfo")
     public ResponseEntity getUserInfo(HttpSession session) {
         UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
@@ -65,7 +86,7 @@ public class WebUserController {
     @PostMapping("/logoutCom")
     public ResponseEntity logoutCom(HttpSession session) {
         UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
-        if (userInfo != null && userInfo.getMemberId() != null) {
+        if (userInfo != null) {
             webUserService.logoutCom(session, userInfo);
             return ResponseEntityUtil.success();
         } else {
@@ -93,7 +114,6 @@ public class WebUserController {
     public ResponseEntity getServer(HttpSession session) {
         UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
         String token = userInfo.getToken();
-        System.out.println("查询指令=========================================>>>>>" +token);
         return ResponseEntityUtil.success();
     }
 }

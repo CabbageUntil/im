@@ -27,6 +27,8 @@ public class UserInfo {
 
     private String token;
 
+    private String groupId;//群组编号
+
     //登录状态
 
     private String code;

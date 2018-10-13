@@ -26,6 +26,20 @@
         group_member_id,name,mebile,applicate_date,verify_date,applicate_remark
     </sql>
 
+    <!-- 查询正在审核的群的编号 -->
+    <select id="selectNotViewGroupList" resultMap="groupList" parameterType="java.lang.String">
+        select
+        a.mebile ,a.name
+        from ab_group_member_tab a
+        inner join  ab_member_and_group_tab b
+        on a.group_member_id = b.group_member_id
+        inner join ab_group_tab c
+        on c.group_id = b.group_id
+        where
+        b.member_role = 0
+        c.group_id = #{aa,jdbcType=NVARCHAR}
+    </select>
+
     <!--查询群成员信息-->
     <select id="findGroupMember" resultMap="groupList" parameterType="com.csxx.dao.webOrg.AbGroupMember"  >
         select
@@ -71,7 +85,6 @@
             #{verifyDate,jdbcType=TIMESTAMP},
         )
     </insert>
-
 
      <!-- 选择添加成员信息-->
     <insert id="insertSelective" parameterType="com.csxx.dao.webOrg.AbGroupMember" >
