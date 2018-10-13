@@ -1,6 +1,7 @@
 package com.csxx.mapper.webOrg;
 
 import com.csxx.dao.webOrg.AbGroupAndMember;
+import org.apache.ibatis.annotations.Param;
 
 public interface AbGroupAndMemberMapper {
     /**
@@ -22,5 +23,13 @@ public interface AbGroupAndMemberMapper {
      * @return
      */
     int insert(AbGroupAndMember record);
+
+    /**
+     * 审核群组成员
+     * @param groupMemberId
+     * @param groupId
+     * @return
+     */
+    int verifyGroupMember(AbGroupAndMember abGroupAndMember);
 
 }

@@ -34,4 +34,14 @@
     #{memberStatus,jdbcType=TINYINT},
     #{memberRole,jdbcType=TINYINT})
   </insert>
+    <!-- -->
+    <update id="verifyGroupMember" parameterType="com.csxx.dao.webOrg.AbGroupAndMember" >
+        update
+        ab_member_and_group_tab
+        set
+        member_role =  #{memberRole,jdbcType=TINYINT}
+        where
+        group_id = #{groupId,jdbcType=NVARCHAR}
+        and group_member_id = #{groupMemberId,jdbcType=NVARCHAR}
+    </update>
 </mapper>

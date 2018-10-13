@@ -24,6 +24,7 @@ public class WebGroupController {
 
     @Autowired
     private WebGroupService webGroupService;
+
     private UserInfo getUserInfo(HttpSession session) {
         return (UserInfo)session.getAttribute(UserInfoEnum.USERINFO);
     }
@@ -106,6 +107,27 @@ public class WebGroupController {
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null) {
             return webGroupService.createGroupList(userInfo);
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+
+    /**
+     * 审核群成员信息
+     * @param session
+     * @param groupMemberId
+     * @return
+     */
+    @PostMapping("/verifyGroupMember")
+    public ResponseEntity verifyGroupMember(HttpSession session,
+                                            @RequestParam("groupMemberId") String groupMemberId){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+           if(webGroupService.verifyGroupMember(userInfo,groupMemberId)>0){
+              return  ResponseEntityUtil.success();
+           }else{
+             return  ResponseEntityUtil.error(1144,"网络异常操作失败！");
+           }
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }

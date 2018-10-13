@@ -43,4 +43,6 @@ public interface WebGroupService {
      * @return
      */
     ResponseEntity createGroupList(UserInfo userInfo);
+
+    int verifyGroupMember(UserInfo userInfo,String groupMemberId);
 }

@@ -29,7 +29,7 @@
     <!-- 查询正在审核的群的编号 -->
     <select id="selectNotViewGroupList" resultMap="groupList" parameterType="java.lang.String">
         select
-        a.mebile ,a.name
+        a.mebile ,a.name,a.group_member_id
         from ab_group_member_tab a
         inner join  ab_member_and_group_tab b
         on a.group_member_id = b.group_member_id
@@ -37,7 +37,7 @@
         on c.group_id = b.group_id
         where
         b.member_role = 0
-        c.group_id = #{aa,jdbcType=NVARCHAR}
+        and c.group_id = #{aa,jdbcType=NVARCHAR}
     </select>
 
     <!--查询群成员信息-->

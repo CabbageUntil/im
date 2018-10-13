@@ -42,7 +42,9 @@
 
     <!-- 登录群组是获取群成员的信息 包含：群名称，姓名，角色-->
     <select id="selectGroupMemberByMebileAndGroupId" resultMap="GroupMemberInfo" parameterType="java.lang.String">
-        select a.name member_name,c.name group_name,c.group_id group_id, b.member_role member_role  from ab_group_member_tab a
+        select a.name member_name,c.name group_name,c.group_id group_id,
+         b.member_role member_role
+         from ab_group_member_tab a
             inner join  ab_member_and_group_tab b
                 on a.group_member_id = b.group_member_id
             inner join ab_group_tab c
@@ -188,6 +190,7 @@
         </set>
         where group_id = #{groupId,jdbcType=NVARCHAR}
     </update>
+
     <!--更新群的信息,注意没有传值时，默认保存空值-->
     <update id="updateByPrimaryKey" parameterType="com.csxx.dao.webOrg.AbGroup" >
     update

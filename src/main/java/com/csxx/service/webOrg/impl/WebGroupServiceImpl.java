@@ -179,4 +179,20 @@ public class WebGroupServiceImpl implements WebGroupService {
         tableDTO = PageInfo2TableDTO.convert(pageInfo,null);
         return ResponseEntityUtil.success(tableDTO);
     }
+
+    /**
+     * 审核群员信息
+     * @param userInfo
+     * @param groupMemberId
+     * @return
+     */
+    @Override
+    @Transactional
+    public int verifyGroupMember(UserInfo userInfo, String groupMemberId) {
+        AbGroupAndMember abGroupAndMember = new AbGroupAndMember();
+        abGroupAndMember.setGroupId(userInfo.getGroupId());
+        abGroupAndMember.setGroupMemberId(groupMemberId);
+        abGroupAndMember.setMemberRole((byte)1);
+        return abGroupAndMemberMapper.verifyGroupMember(abGroupAndMember);
+    }
 }
