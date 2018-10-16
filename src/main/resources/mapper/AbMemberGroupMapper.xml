@@ -26,7 +26,7 @@
         group_member_id,name,mebile,applicate_date,verify_date,applicate_remark
     </sql>
 
-    <!-- 查询正在审核的群的编号 -->
+    <!-- 查询没有审核通过的成员信息 -->
     <select id="selectNotViewGroupList" resultMap="groupList" parameterType="java.lang.String">
         select
         a.mebile ,a.name,a.group_member_id
@@ -38,6 +38,21 @@
         where
         b.member_role = 0
         and c.group_id = #{aa,jdbcType=NVARCHAR}
+    </select>
+
+    <!-- 查询审核通过成员的信息 -->
+    <select id="selectViewGroupList" resultMap="groupList" parameterType="java.lang.String">
+        select
+        a.mebile ,a.name,a.group_member_id
+        from ab_group_member_tab a
+        inner join  ab_member_and_group_tab b
+        on a.group_member_id = b.group_member_id
+        inner join ab_group_tab c
+        on c.group_id = b.group_id
+        where
+        b.member_role &lt;&gt; 0
+        and c.group_id = #{aa,jdbcType=NVARCHAR}
+        and a.name  LIKE  '%'+ #{name ,jdbcType=NVARCHAR} + '%'
     </select>
 
     <!--查询群成员信息-->

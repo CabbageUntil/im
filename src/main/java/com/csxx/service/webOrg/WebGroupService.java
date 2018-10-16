@@ -44,5 +44,18 @@ public interface WebGroupService {
      */
     ResponseEntity createGroupList(UserInfo userInfo);
 
+    /**
+     * 确定成员审核是否通过
+     * @param userInfo
+     * @param groupMemberId
+     * @return
+     */
     int verifyGroupMember(UserInfo userInfo,String groupMemberId);
+    /**
+     * 移除群组成员
+     * @param userInfo
+     * @param groupMemberId
+     * @return
+     */
+    int deleteGroupMember(UserInfo userInfo,String groupMemberId);
 }

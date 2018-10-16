@@ -195,4 +195,20 @@ public class WebGroupServiceImpl implements WebGroupService {
         abGroupAndMember.setMemberRole((byte)1);
         return abGroupAndMemberMapper.verifyGroupMember(abGroupAndMember);
     }
+    /**
+     * 移除群组成员信息
+     * @param userInfo
+     * @param groupMemberId
+     * @return
+     */
+    @Override
+    @Transactional
+    public int deleteGroupMember(UserInfo userInfo, String groupMemberId) {
+        AbGroupAndMember abGroupAndMember = new AbGroupAndMember();
+        abGroupAndMember.setGroupId(userInfo.getGroupId());
+        abGroupAndMember.setGroupMemberId(groupMemberId);
+        //role = 1表示群成员已经移除
+        abGroupAndMember.setMemberRole((byte)0);
+        return abGroupAndMemberMapper.verifyGroupMember(abGroupAndMember);
+    }
 }

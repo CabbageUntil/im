@@ -8,9 +8,7 @@ import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -26,6 +24,7 @@ public class WebGroupMemberController {
         return (UserInfo)session.getAttribute(UserInfoEnum.USERINFO);
     }
     /**
+     * 查询待审核的群成员的信息
      * @param session
      * @return
      */
@@ -34,6 +33,25 @@ public class WebGroupMemberController {
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null && userInfo.getGroupId() != null) {
             return webGroupMemberService.selectNotViewGroupList(userInfo);
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+    /**
+     * 查询审核通过的群成员的信息
+     * @param session
+     * @return
+     */
+    @PostMapping("/selectViewGroupList")
+    @ResponseBody
+    public ResponseEntity selectViewGroupList(HttpSession session,
+                                              @RequestParam(value="name", required = true) String  name,
+                                              @RequestParam(value="page", required = true) int  page,
+                                              @RequestParam(value="per_page", required = true) int  PerPage
+                                              ){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null && userInfo.getGroupId() != null) {
+            return webGroupMemberService.selectViewGroupList(userInfo,page,PerPage,name);
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }

@@ -25,9 +25,8 @@ public interface AbGroupAndMemberMapper {
     int insert(AbGroupAndMember record);
 
     /**
-     * 审核群组成员
-     * @param groupMemberId
-     * @param groupId
+     * 审核 、删除
+     * @param abGroupAndMember
      * @return
      */
     int verifyGroupMember(AbGroupAndMember abGroupAndMember);

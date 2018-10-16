@@ -132,4 +132,28 @@ public class WebGroupController {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }
     }
+    /**
+     * 移除群组成员
+     * @param session
+     * @param groupMemberId
+     * @return
+     */
+    @PostMapping("/deleteGroupMember")
+    public ResponseEntity deleteGroupMember(HttpSession session,
+                                            @RequestParam("groupMemberId") String groupMemberId){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+            if(!userInfo.getUsername().equals(groupMemberId)){
+                return  ResponseEntityUtil.error(1144,"不能删除群组管理员！");
+            }else{
+                if(webGroupService.deleteGroupMember(userInfo,groupMemberId)>0){
+                    return  ResponseEntityUtil.success();
+                }else{
+                    return  ResponseEntityUtil.error(1144,"网络异常操作失败！");
+                }
+            }
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
 }

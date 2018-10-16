@@ -19,7 +19,9 @@
         delete from ab_member_and_group_tab
         where group_member_id = #{groupMemberId,jdbcType=NVARCHAR}
     </delete>
-      <!-- 添加群和成员之间的关系 -->
+
+
+    <!-- 添加群和成员之间的关系 -->
     <insert id="insert" parameterType="com.csxx.dao.webOrg.AbGroupAndMember" >
     insert into
         ab_member_and_group_tab (
@@ -33,8 +35,9 @@
     #{groupMemberId,jdbcType=NVARCHAR},
     #{memberStatus,jdbcType=TINYINT},
     #{memberRole,jdbcType=TINYINT})
-  </insert>
-    <!-- 成员的验证 -->
+    </insert>
+
+    <!-- 成员信息审核、移除   通用-->
     <update id="verifyGroupMember" parameterType="com.csxx.dao.webOrg.AbGroupAndMember" >
         update
         ab_member_and_group_tab

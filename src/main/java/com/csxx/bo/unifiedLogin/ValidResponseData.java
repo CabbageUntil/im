@@ -49,4 +49,30 @@ public class ValidResponseData {
 
     private String ticket;
 
+    @Override
+    public String toString() {
+        return "ValidResponseData{" +
+                "userid=" + userid +
+                ", idenum=" + idenum +
+                ", username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", prefix='" + prefix + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", email='" + email + '\'' +
+                ", status=" + status +
+                ", is_super=" + is_super +
+                ", not_active=" + not_active +
+                ", login_count=" + login_count +
+                ", last_login_ip='" + last_login_ip + '\'' +
+                ", last_login_time=" + last_login_time +
+                ", avatar='" + avatar + '\'' +
+                ", source='" + source + '\'' +
+                ", mail_name='" + mail_name + '\'' +
+                ", mail_pwd='" + mail_pwd + '\'' +
+                ", voip_pwd='" + voip_pwd + '\'' +
+                ", voip_time=" + voip_time +
+                ", token='" + token + '\'' +
+                ", ticket='" + ticket + '\'' +
+                '}';
+    }
 }
