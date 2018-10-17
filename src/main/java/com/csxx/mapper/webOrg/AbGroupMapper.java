@@ -72,4 +72,17 @@ public interface AbGroupMapper {
      */
     GroupMemberInfo selectGroupMemberByMebileAndGroupId(@Param(value="groupId") String groupId,
                                                         @Param(value="mebile") String mebile);
+
+    /**
+     * 查询已进入的群组数
+     * @param mebile
+     * @return
+     */
+    int getJionGroupCount(@Param(value="num") String mebile);
+    /**
+     * 查询创建的群组数
+     * @param mebile
+     * @return
+     */
+    int getCreateGroupCount(@Param(value="num") String mebile);
 }

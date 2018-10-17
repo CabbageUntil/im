@@ -166,7 +166,7 @@ public class WebMemberController {
     }
 
     /**
-     * 修改用户性你想
+     * 修改用户信息
      * @param session
      * @param form
      * @return

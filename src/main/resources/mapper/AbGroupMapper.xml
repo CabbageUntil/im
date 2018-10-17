@@ -112,6 +112,36 @@
             )
     </select>
 
+    <!-- 查询加入的群组的数量-->
+    <select id="getJionGroupCount" resultType="int"  parameterType="string">
+      select count(*)  from ab_group_tab a
+        inner join ab_member_and_group_tab b
+          on  a.group_id = b.group_id
+        inner join ab_group_member_tab c
+            on c.group_member_id = b.group_member_id
+        where
+            c.mebile = #{num}
+        and
+            a.status  = 1
+        and
+            b.member_role  &lt;&gt;  0
+    </select>
+
+    <!-- 查询创建的群组的数量-->
+    <select id="getCreateGroupCount"  resultType="int"  parameterType="string">
+        select count(*)  from ab_group_tab a
+            inner join ab_member_and_group_tab b
+              on  a.group_id = b.group_id
+            inner join ab_group_member_tab c
+                on c.group_member_id = b.group_member_id
+            where
+                c.mebile = #{num}
+            and
+                a.status  = 1
+            and
+                b.member_role  = 2
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from ab_group_tab
         where group_id = #{groupId,jdbcType=NVARCHAR}

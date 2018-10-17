@@ -41,7 +41,7 @@ public class WebGroupServiceImpl implements WebGroupService {
      */
     @Override
     @Transactional
-    public void createGroup(UserInfo userInfo, String groupName,String userName) {
+    public void createGroup(UserInfo userInfo, String groupName) {
         //查看之前是否已经注册用户了
         AbGroupMember abGroupMember1 = abMemberGroupMapper.getMemberId(userInfo.getUsername());
         if(abGroupMember1!=null&&!"".equals(abGroupMember1)){
@@ -84,10 +84,17 @@ public class WebGroupServiceImpl implements WebGroupService {
             abGroup.setCreateDate(new Date());
             abGroupMapper.insertSelective(abGroup);
 
+            //通过session获取nickName
+            String userName = userInfo.getName();
             //成员信息保存
             AbGroupMember abGroupMember  = new AbGroupMember();
             abGroupMember.setGroupMemberId(groupMemberId);
-            abGroupMember.setName(userName);
+            if(userName!=null){
+                abGroupMember.setName(userName);
+            }else {
+                abGroupMember.setName(userInfo.getUsername());
+            }
+
             //状态0：已经退出 1：审核中  2：通过审核
             abGroupMember.setApplicateDate(new Date() );
             abGroupMember.setMebile(userInfo.getUsername());
@@ -116,7 +123,8 @@ public class WebGroupServiceImpl implements WebGroupService {
      * @param groupId
      */
     @Override
-    public void joinGroup(UserInfo userInfo, String groupId,String userName) {
+    @Transactional
+    public void joinGroup(UserInfo userInfo, String groupId) {
         //查询是否已经拥有群成员的信息
         AbGroupMember abGroupMember1 = abMemberGroupMapper.getMemberId(userInfo.getUsername());
         if(abGroupMember1!=null&&!"".equals(abGroupMember1)){
@@ -142,10 +150,16 @@ public class WebGroupServiceImpl implements WebGroupService {
             abGroupAndMember.setMemberRole((byte)0);
             abGroupAndMemberMapper.insert(abGroupAndMember);
 
+            //获取session中Name
+            String userName = userInfo.getName();
             //成员信息保存
             AbGroupMember abGroupMember  = new AbGroupMember();
             abGroupMember.setGroupMemberId(groupMemberId);
-            abGroupMember.setName(userName);
+            if(userName!=null){
+                abGroupMember.setName(userName);
+            }else{
+                abGroupMember.setName(userInfo.getUsername());
+            }
             abGroupMember.setApplicateDate(new Date() );
             abGroupMember.setMebile(userInfo.getUsername());
             abMemberGroupMapper.insertSelective(abGroupMember);
@@ -172,6 +186,7 @@ public class WebGroupServiceImpl implements WebGroupService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseEntity createGroupList(UserInfo userInfo) {
         TableDTO<AbGroup> tableDTO;
         List<AbGroup> allDept  = abGroupMapper.cresatGroupList(userInfo.getUsername());
@@ -210,5 +225,25 @@ public class WebGroupServiceImpl implements WebGroupService {
         //role = 1表示群成员已经移除
         abGroupAndMember.setMemberRole((byte)0);
         return abGroupAndMemberMapper.verifyGroupMember(abGroupAndMember);
+    }
+
+    /**
+     * 获取加入的群组的数量
+     * @param userInfo
+     * @return
+     */
+    @Override
+    public int getJionGroupCount(UserInfo userInfo) {
+        return abGroupMapper.getJionGroupCount(userInfo.getUsername());
+    }
+
+    /**
+     * 获取创建数组数量
+     * @param userInfo
+     * @return
+     */
+    @Override
+    public int getCreateGroupCount(UserInfo userInfo) {
+        return abGroupMapper.getCreateGroupCount(userInfo.getUsername());
     }
 }

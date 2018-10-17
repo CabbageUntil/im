@@ -5,6 +5,7 @@ import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.UserInfoEnum;
 import com.csxx.service.webOrg.WebGroupService;
 import com.csxx.utils.ResponseEntityUtil;
+import com.csxx.utils.groupList;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.UserInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -33,17 +34,15 @@ public class WebGroupController {
      * 创建群组
      * @param session
      * @param groupName
-     * @param userName
      * @return
      */
     @PostMapping("/createGroup")
     public ResponseEntity createGroup(HttpSession session,
-                                      @RequestParam("groupName") String groupName,
-                                      @RequestParam("userName") String userName
+                                      @RequestParam("groupName") String groupName
     ){
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null) {
-            webGroupService.createGroup(userInfo,groupName,userName);
+            webGroupService.createGroup(userInfo,groupName);
             return ResponseEntityUtil.success();
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
@@ -57,11 +56,10 @@ public class WebGroupController {
      */
     @PostMapping("/joinGroup")
     public ResponseEntity joinGroup(HttpSession session,
-                                    @RequestParam("groupId") String groupId,
-                                    @RequestParam("userName") String userName){
+                                    @RequestParam("groupId") String groupId){
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null) {
-            webGroupService.joinGroup(userInfo,groupId,userName);
+            webGroupService.joinGroup(userInfo,groupId);
             return ResponseEntityUtil.success();
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
@@ -154,6 +152,41 @@ public class WebGroupController {
             }
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+
+    /**
+     * get join group number
+     * @param session
+     * @return
+     */
+    @PostMapping("/getJionGroupCount")
+    public ResponseEntity getJionGroupCount(HttpSession session){
+        UserInfo userInfo = getUserInfo(session);
+        if(userInfo != null){
+            Integer count = webGroupService.getJionGroupCount(userInfo);
+            groupList groupList = new groupList();
+            groupList.setCount(count);
+            return ResponseEntityUtil.success(groupList);
+        }else{
+           return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+    /**
+     * get Not join group 0f number
+     * @param session
+     * @return
+     */
+    @PostMapping("/getCreateGroupCount")
+    public ResponseEntity getCreateGroupCount(HttpSession session){
+        UserInfo userInfo = getUserInfo(session);
+        if(userInfo != null){
+            Integer count  = webGroupService.getCreateGroupCount(userInfo);
+            groupList groupList = new groupList();
+            groupList.setCount(count);
+            return ResponseEntityUtil.success(groupList);
+        }else{
+           return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }
     }
 }

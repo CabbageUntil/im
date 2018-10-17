@@ -7,14 +7,6 @@ import com.csxx.vo.webOrg.UserInfo;
 import java.util.List;
 
 public interface WebGroupService {
-    /**
-     * 创建群组信息
-     * @param userInfo
-     * @param groupName
-     * @param userName
-     * @return
-     */
-    void createGroup(UserInfo userInfo,String groupName,String userName);
 
     /**
      * 查询加入的群组的信息
@@ -24,11 +16,18 @@ public interface WebGroupService {
     ResponseEntity selectGroupList(UserInfo userInfo);
 
     /**
+     * 创建群组信息
+     * @param userInfo
+     * @param groupName
+     * @return
+     */
+    void createGroup(UserInfo userInfo,String groupName);
+    /**
      * 加入分组的功能
      * @param userInfo
      * @param groupId
      */
-    void  joinGroup(UserInfo userInfo,String groupId,String userName);
+    void  joinGroup(UserInfo userInfo,String groupId);
 
     /**
      * 查询已经有群组信息
@@ -51,6 +50,7 @@ public interface WebGroupService {
      * @return
      */
     int verifyGroupMember(UserInfo userInfo,String groupMemberId);
+
     /**
      * 移除群组成员
      * @param userInfo
@@ -58,4 +58,16 @@ public interface WebGroupService {
      * @return
      */
     int deleteGroupMember(UserInfo userInfo,String groupMemberId);
+    /**
+     * 获取加入的群组的数量
+     * @param userInfo
+     * @return
+     */
+    int getJionGroupCount(UserInfo userInfo);
+    /**
+     * 获取创建数组数量
+     * @param userInfo
+     * @return
+     */
+    int getCreateGroupCount(UserInfo userInfo);
 }
