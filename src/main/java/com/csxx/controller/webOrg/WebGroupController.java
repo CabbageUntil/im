@@ -53,6 +53,7 @@ public class WebGroupController {
      * 加入分组功能
      * @param session
      * @return
+     * addGroupMember
      */
     @PostMapping("/joinGroup")
     public ResponseEntity joinGroup(HttpSession session,
@@ -187,6 +188,42 @@ public class WebGroupController {
             return ResponseEntityUtil.success(groupList);
         }else{
            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+    /**
+     * 添加群成员功能
+     * @param session
+     * @return
+     */
+    @PostMapping("/addGroupMember")
+    public ResponseEntity addGroupMember(HttpSession session,
+                                    @RequestParam("name") String name, @RequestParam("mobile") String mobile ){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+            webGroupService.addGroupMember(userInfo,name,mobile);
+            return ResponseEntityUtil.success();
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+
+    /**
+     * 通过手机号判断该成员是否已经加入群
+     * @param session
+     * @param mobile
+     * @return
+     */
+    @PostMapping("/checkGroupMember")
+    public ResponseEntity checkGroupMember(HttpSession session,@RequestParam("mobile") String mobile){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+            if(!webGroupService.checkGroupMember(userInfo,mobile)){
+                return ResponseEntityUtil.success();
+            }else{
+                return ResponseEntityUtil.error(122,"用户已经添加群组");
+            }
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }
     }
 }

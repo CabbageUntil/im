@@ -19,4 +19,6 @@ public interface WebGroupMemberService {
      * @return
      */
     ResponseEntity selectViewGroupList(UserInfo userInfo,Integer page,Integer perPage,String name);
+
+
 }

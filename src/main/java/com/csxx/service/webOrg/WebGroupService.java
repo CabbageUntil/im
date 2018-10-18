@@ -70,4 +70,17 @@ public interface WebGroupService {
      * @return
      */
     int getCreateGroupCount(UserInfo userInfo);
+    /**
+     * 群组添加成员 参数说明 手机号码和姓名
+     * @param userInfo
+     * @param mobile
+     */
+    void  addGroupMember(UserInfo userInfo,String name,String mobile);
+    /**
+     * 根据手机号判断该成员是否已经加入群组
+     * @param userInfo
+     * @param mobile
+     */
+    boolean  checkGroupMember(UserInfo userInfo,String mobile);
+
 }

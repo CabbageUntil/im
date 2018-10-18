@@ -8,12 +8,16 @@ import com.csxx.utils.ResponseEntityUtil;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.net.URLEncoder;
 
 @RestController
@@ -59,11 +63,13 @@ public class WebUserController {
      * @return
      */
     @PostMapping("/loginGroup")
-    public ResponseEntity loginGroup(HttpSession session,String groupId){
+    public ResponseEntity loginGroup(HttpSession session, String groupId, HttpServletResponse response) throws IOException {
         UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
         if (userInfo != null) {
             return webUserService.loginGroup(session, userInfo, groupId);
         } else {
+            //response.sendRedirect("https://passport.dianchat.net/pass/service_login?callback=http://110.165.41.27:8092/login");
+
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN.getCode(), "需要登录");
         }
     }

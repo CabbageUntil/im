@@ -15,4 +15,5 @@ public class AbGroup {
     private Byte   status;//状态
     private Date createDate;//创建日期
     private Date removeDate;//解散日期
+    private String groupCreator;//群创建人
 }

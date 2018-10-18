@@ -63,7 +63,7 @@ public interface AbGroupMapper {
     /**
      * 查询已经添加的群组的信息
      */
-    List<AbGroup> cresatGroupList(@Param(value = "aa") String mebile);
+    List<AbGroup> createGroupList(@Param(value = "aa") String mebile);
 
     /**
      * 登录时查找成员信息(姓名，群名，角色编号)

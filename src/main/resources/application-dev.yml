@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8288
   tomcat:
     uri-encoding: utf-8
 
@@ -43,8 +43,8 @@ web-contact:
   expireTime: 86400
   loginPage: http://localhost:8091/contactWeb/#/login
   logoutPage: https://passport.dianchat.net/pass/logout?callback=https://passport.dianchat.net/pass/service_login?callback=http://localhost:8092/org/login
-  webContactPage: http://localhost:8088/im/webContatcs/api/list?
-  webContactDelPage: http://localhost:8088/im/webContatcs/api/get_delete_list?
+  webContactPage: http://localhost:8288/im/webContatcs/api/list?
+  webContactDelPage: http://localhost:8288/im/webContatcs/api/get_delete_list?
 
 # 企业管理配置
 web-org:
@@ -52,11 +52,11 @@ web-org:
   expireTime: 86400
   loginPage: http://localhost:8092/#/login
   logoutPage: https://passport.dianchat.net/pass/logout?callback=https://passport.dianchat.net/pass/service_login?callback=http://localhost:8092/#/login
-  joinComPage: http://localhost:8088/org/joinComList?
-  otherComPage: http://localhost:8088/org/otherComList?
-  ownComPage: http://localhost:8088/org/ownComList?
-  findMemberConfig: http://localhost:8088/org/findMember?
-  allDeptConfig: http://localhost:8088/org/allDeptMent?
-  findOrgAgendaByYearConfig: http://localhost:8088/org/findOrAgendaByYear?
-  findOrgAgendaByMonthConfig: http://localhost:8088/org/findOrAgendaByMonth?
-  findOrgAgendaByDayConfig: http://localhost:8088/org/findOrAgendaByDay?
+  joinComPage: http://localhost:8288/org/joinComList?
+  otherComPage: http://localhost:8288/org/otherComList?
+  ownComPage: http://localhost:8288/org/ownComList?
+  findMemberConfig: http://localhost:8288/org/findMember?
+  allDeptConfig: http://localhost:8288/org/allDeptMent?
+  findOrgAgendaByYearConfig: http://localhost:8288/org/findOrAgendaByYear?
+  findOrgAgendaByMonthConfig: http://localhost:8288/org/findOrAgendaByMonth?
+  findOrgAgendaByDayConfig: http://localhost:8288/org/findOrAgendaByDay?

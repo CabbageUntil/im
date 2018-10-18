@@ -37,7 +37,6 @@ public class WebGroupServiceImpl implements WebGroupService {
      * 创建分组的信息
      * @param userInfo
      * @param groupName
-     * @param userName
      */
     @Override
     @Transactional
@@ -56,8 +55,14 @@ public class WebGroupServiceImpl implements WebGroupService {
             abGroupAndMember.setMemberRole((byte)2);
             abGroupAndMemberMapper.insert(abGroupAndMember);
 
+            String userName = userInfo.getName();
             //群组信息保存
             AbGroup abGroup = new AbGroup();
+            if(userName!=null){
+                abGroup.setGroupCreator(userName);
+            }else {
+                abGroup.setGroupCreator(userInfo.getUsername());
+            }
             abGroup.setName(groupName);
             abGroup.setGroupId(groupId);
             abGroup.setStatus((byte)1);
@@ -76,16 +81,22 @@ public class WebGroupServiceImpl implements WebGroupService {
             abGroupAndMember.setMemberRole((byte)2);
             abGroupAndMemberMapper.insert(abGroupAndMember);
 
+
+            //通过session获取nickName
+            String userName = userInfo.getName();
             //群组信息保存
             AbGroup abGroup = new AbGroup();
+            if(userName!=null){
+                abGroup.setGroupCreator(userName);
+            }else {
+                abGroup.setGroupCreator(userInfo.getUsername());
+            }
             abGroup.setName(groupName);
             abGroup.setGroupId(groupId);
             abGroup.setStatus((byte)1);
             abGroup.setCreateDate(new Date());
             abGroupMapper.insertSelective(abGroup);
 
-            //通过session获取nickName
-            String userName = userInfo.getName();
             //成员信息保存
             AbGroupMember abGroupMember  = new AbGroupMember();
             abGroupMember.setGroupMemberId(groupMemberId);
@@ -189,7 +200,7 @@ public class WebGroupServiceImpl implements WebGroupService {
     @Transactional
     public ResponseEntity createGroupList(UserInfo userInfo) {
         TableDTO<AbGroup> tableDTO;
-        List<AbGroup> allDept  = abGroupMapper.cresatGroupList(userInfo.getUsername());
+        List<AbGroup> allDept  = abGroupMapper.createGroupList(userInfo.getUsername());
         PageInfo<AbGroup> pageInfo = new PageInfo<>(allDept);
         tableDTO = PageInfo2TableDTO.convert(pageInfo,null);
         return ResponseEntityUtil.success(tableDTO);
@@ -245,5 +256,53 @@ public class WebGroupServiceImpl implements WebGroupService {
     @Override
     public int getCreateGroupCount(UserInfo userInfo) {
         return abGroupMapper.getCreateGroupCount(userInfo.getUsername());
+    }
+
+    /**
+     * 群组添加成员 参数说明 手机号码和姓名
+     * @param userInfo
+     * @param name
+     * @param mobile
+     */
+    @Override
+    public void addGroupMember(UserInfo userInfo, String name, String mobile) {
+        //为成员分配账号
+        String groupMemberId = NumberUtil.newNumberID();
+
+        //建立群和成员的关系信息
+        AbGroupAndMember abGroupAndMember = new AbGroupAndMember();
+        //获取群的编号
+        abGroupAndMember.setGroupId(userInfo.getGroupId());
+        abGroupAndMember.setGroupMemberId(groupMemberId);
+        //添加成员默认已经通过审核，1：通过审核  0：未通过审核
+        abGroupAndMember.setMemberStatus((byte)1);
+        //添加成员是默认成员的角色为群成员：1：群成员 2：群创始人
+        abGroupAndMember.setMemberRole((byte)1);
+        abGroupAndMemberMapper.insert(abGroupAndMember);
+
+        //获取session中Name
+        //成员信息保存
+        AbGroupMember abGroupMember  = new AbGroupMember();
+        abGroupMember.setGroupMemberId(groupMemberId);
+        abGroupMember.setName(name);//群成员姓名
+        abGroupMember.setApplicateDate(new Date() );//申请时间
+        abGroupMember.setMebile(mobile);//手机后为当前手机号
+        abMemberGroupMapper.insertSelective(abGroupMember);
+
+    }
+
+    /**
+     * 根据手机号判断该成员是否已经加入群组
+     * @param userInfo
+     * @param mobile
+     */
+    @Override
+    public boolean checkGroupMember(UserInfo userInfo, String mobile) {
+        String groupMemberId = abMemberGroupMapper.getMemberIdByMobileAndGroupId(mobile,userInfo.getGroupId());
+        if(groupMemberId!=null){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -5,6 +5,7 @@
         <constructor >
             <arg column="group_id" jdbcType="NVARCHAR" javaType="java.lang.String" />
             <arg column="name" jdbcType="NVARCHAR" javaType="java.lang.String" />
+            <arg column="group_creator" jdbcType="NVARCHAR" javaType="java.lang.String" />
             <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
             <arg column="create_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
             <arg column="remove_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
@@ -14,8 +15,10 @@
         <id property="groupId" column="group_id" />
         <result property="name" column="name" />
         <result property="status" column="status" />
+        <result property="groupCreator" column="group_creator" />
         <result property="createDate" column="create_date" />
         <result property="removeDate" column="remove_date" />
+        <result property="groupCreator" column="group_creator" />
     </resultMap>
     <resultMap id="ListMapper" type="com.csxx.utils.groupList">
         <id property="groupId" column="group_id" />
@@ -28,7 +31,7 @@
         <result property="memberRole" column="member_role" />
     </resultMap>
     <sql id="Base_Column_List" >
-        group_id,name,status,create_date,remove_date
+        group_id,name,status,create_date,remove_date,group_creator
     </sql>
 
 
@@ -76,7 +79,7 @@
     </select>
 
     <!--查询创建的分组的信息 -->
-    <select id="cresatGroupList" resultMap="groupList" parameterType="java.lang.String">
+    <select id="createGroupList" resultMap="groupList" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List" />
         FROM
@@ -153,16 +156,19 @@
      name,
      status,
      create_date,
-     remove_date
+     remove_date,
+     group_creator
     )
     values (
       #{groupId,jdbcType=NVARCHAR},
       #{name,jdbcType=NVARCHAR},
       #{status,jdbcType=TINYINT},
       #{createDate,jdbcType=TIMESTAMP},
-      #{removeDate,jdbcType=TIMESTAMP}
+      #{removeDate,jdbcType=TIMESTAMP},
+      #{groupCreator,jdbcType=NVARCHAR},
       )
   </insert>
+
      <!-- 选择添加属性数据 -->
     <insert id="insertSelective" parameterType="com.csxx.dao.webOrg.AbGroup" >
         insert into ab_group_tab
@@ -182,6 +188,9 @@
             <if test="removeDate != null" >
                 remove_date,
             </if>
+            <if test="groupCreator != null" >
+                group_creator,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="groupId != null" >
@@ -199,8 +208,12 @@
             <if test="removeDate != null" >
                 #{removeDate,jdbcType=TIMESTAMP},
             </if>
+            <if test="groupCreator!= null" >
+                #{groupCreator,jdbcType=NVARCHAR},
+            </if>
         </trim>
     </insert>
+
     <!--根据群编号更新群信息-->
     <update id="updateByPrimaryKeySelective" parameterType="com.csxx.dao.webOrg.AbGroup" >
         update ab_group_tab

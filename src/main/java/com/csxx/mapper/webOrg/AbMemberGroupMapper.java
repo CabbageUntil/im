@@ -71,4 +71,11 @@ public interface AbMemberGroupMapper {
      * @return
      */
      AbGroupMember getMemberId(String mebile);
+    /**
+     * 根据手机换号和群组号查成员编号信息
+     * @param mebile
+     * @param groupId
+     * @return
+     */
+     String  getMemberIdByMobileAndGroupId(@Param(value="mobile")String mobile,@Param(value="groupId") String groupId);
 }

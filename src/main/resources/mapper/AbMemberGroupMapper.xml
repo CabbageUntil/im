@@ -71,6 +71,18 @@
         where mebile =  #{mebile,jdbcType=NVARCHAR}
     </select>
 
+    <!--查询群组标号和成员编号群成员编号信息-->
+    <select id="getMemberIdByMobileAndGroupId"  resultType="java.lang.String"  parameterType="java.lang.String"  >
+         select
+          a.group_member_id
+        from
+          ab_group_member_tab a
+         inner join ab_member_and_group_tab b
+        on  a.group_member_id = b.group_member_id
+        where a.mebile = #{mobile,jdbcType=NVARCHAR}
+        and b.group_id = #{groupId,jdbcType=NVARCHAR}
+    </select>
+
     <!-- 根据成员编号删除成员信息 -->
     <delete id="deleteByGroupMemberId" parameterType="java.lang.String">
       delete from
