@@ -142,7 +142,7 @@ public class WebGroupController {
                                             @RequestParam("groupMemberId") String groupMemberId){
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null) {
-            if(!userInfo.getUsername().equals(groupMemberId)){
+            if(userInfo.getGroupMemberId().equals(groupMemberId)){
                 return  ResponseEntityUtil.error(1144,"不能删除群组管理员！");
             }else{
                 if(webGroupService.deleteGroupMember(userInfo,groupMemberId)>0){
@@ -150,6 +150,45 @@ public class WebGroupController {
                 }else{
                     return  ResponseEntityUtil.error(1144,"网络异常操作失败！");
                 }
+            }
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+    /**
+     * 退群即群组成员主动离开群组
+     * 参数说明：groupMemberId 群成员编号  groupId 群编号
+     * @param session
+     * @return
+     */
+    @PostMapping("/leaveGroup")
+    public ResponseEntity leaveGroup(HttpSession session,@RequestParam("groupId") String groupId){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+            if(webGroupService.leaveGroup(userInfo,groupId)>0){
+                return  ResponseEntityUtil.success();
+            }else{
+                return  ResponseEntityUtil.error(1144,"网络异常操作失败！");
+            }
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+    /**
+     * 群组组长解散群组
+     * 参数说明：groupId 群编号
+     * @param session
+     * @param groupId
+     * @return
+     */
+    @PostMapping("/removegroup")
+    public ResponseEntity removeGroup(HttpSession session,@RequestParam("groupId") String groupId){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+            if(webGroupService.removeGroup(userInfo,groupId)>0){
+                return  ResponseEntityUtil.success();
+            }else{
+                return  ResponseEntityUtil.error(1144,"网络异常操作失败！");
             }
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);

@@ -98,6 +98,7 @@ public class WebUserServiceImpl implements WebUserService {
     public ResponseEntity loginGroup(HttpSession session, UserInfo userInfo, String groupId) {
         GroupMemberInfo groupMemberInfo = abGroupMapper.selectGroupMemberByMebileAndGroupId(groupId,userInfo.getUsername());
         if (groupMemberInfo != null) {
+            userInfo.setGroupMemberId(groupMemberInfo.getGroupMemberId());
             userInfo.setOrgName(groupMemberInfo.getGroupName());
             userInfo.setMemberName(groupMemberInfo.getMemberName());
             String role = groupMemberInfo.getMemberRole().equals("2")? "groupLeader":"groupMember";

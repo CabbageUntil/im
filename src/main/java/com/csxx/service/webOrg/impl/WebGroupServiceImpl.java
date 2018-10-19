@@ -222,7 +222,7 @@ public class WebGroupServiceImpl implements WebGroupService {
         return abGroupAndMemberMapper.verifyGroupMember(abGroupAndMember);
     }
     /**
-     * 移除群组成员信息
+     * 删除群组成员信息(群组长)
      * @param userInfo
      * @param groupMemberId
      * @return
@@ -230,12 +230,36 @@ public class WebGroupServiceImpl implements WebGroupService {
     @Override
     @Transactional
     public int deleteGroupMember(UserInfo userInfo, String groupMemberId) {
-        AbGroupAndMember abGroupAndMember = new AbGroupAndMember();
-        abGroupAndMember.setGroupId(userInfo.getGroupId());
-        abGroupAndMember.setGroupMemberId(groupMemberId);
-        //role = 1表示群成员已经移除
-        abGroupAndMember.setMemberRole((byte)0);
-        return abGroupAndMemberMapper.verifyGroupMember(abGroupAndMember);
+        //参数(成员编号,群编号)
+        return abGroupAndMemberMapper.deleteByMemberIdAndGroupId(groupMemberId,userInfo.getGroupId());
+    }
+
+    /**
+     * 群成员退群
+     * @param userInfo
+     * @param groupId
+     * @return
+     */
+    @Override
+    @Transactional
+    public int leaveGroup(UserInfo userInfo,String groupId) {
+        //参数(成员编号,群编号)
+        return abGroupAndMemberMapper.deleteGroupMember(userInfo.getUsername(),groupId);
+    }
+
+    /**
+     * 解散群组
+     * 需要删除寻的信息
+     * 和群员和群的对应关系
+     * @param userInfo
+     * @param groupId
+     * @return
+     */
+    @Override
+    @Transactional
+    public int removeGroup(UserInfo userInfo, String groupId) {
+        abGroupMapper.deleteByPrimaryKey(groupId);
+        return abGroupAndMemberMapper.deleteByGroupId(groupId);
     }
 
     /**
@@ -245,6 +269,7 @@ public class WebGroupServiceImpl implements WebGroupService {
      */
     @Override
     public int getJionGroupCount(UserInfo userInfo) {
+
         return abGroupMapper.getJionGroupCount(userInfo.getUsername());
     }
 

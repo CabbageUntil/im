@@ -11,6 +11,7 @@ public class GroupMemberInfo {
     private String memberName;//成员姓名
     private String groupName;//群名称
     private String memberRole;//群的角色
+    private String groupMemberId;//群主编号
 
     @Override
     public String toString() {

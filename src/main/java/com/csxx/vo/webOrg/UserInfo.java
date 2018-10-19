@@ -28,6 +28,7 @@ public class UserInfo {
     private String token;
 
     private String groupId;//群组编号
+    private String groupMemberId;//登录群的成员编号(判断是不是群主)
 
     //登录状态
 

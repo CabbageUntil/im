@@ -31,4 +31,14 @@ public interface AbGroupAndMemberMapper {
      */
     int verifyGroupMember(AbGroupAndMember abGroupAndMember);
 
+    /**
+     * 根据成员编号和群组编号删除成员信息
+     * @param memberId
+     * @param groupId
+     * @return
+     */
+    int deleteGroupMember(@Param(value="mobile") String memberId,@Param(value="groupId") String groupId);
+
+    int deleteByMemberIdAndGroupId(@Param(value="memberId") String memberId,@Param(value="groupId") String groupId);
+
 }

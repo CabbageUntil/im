@@ -14,10 +14,18 @@
         delete from ab_member_and_group_tab
         where group_id = #{groupId,jdbcType=NVARCHAR}
     </delete>
-    <!-- 根据成员编号编号删除群关系 -->
+
+    <!-- 根据成员编号删除群关系 -->
     <delete id="deleteByMemberId" parameterType="java.lang.String" >
         delete from ab_member_and_group_tab
         where group_member_id = #{groupMemberId,jdbcType=NVARCHAR}
+    </delete>
+
+    <!-- 根据成员编号和群编号删除群关系 -->
+    <delete id="deleteByMemberIdAndGroupId" parameterType="java.lang.String" >
+        delete from ab_member_and_group_tab
+        where group_member_id = #{memberId,jdbcType=NVARCHAR}
+        and group_id = #{groupId,jdbcType=NVARCHAR}
     </delete>
 
 
@@ -47,4 +55,18 @@
         group_id = #{groupId,jdbcType=NVARCHAR}
         and group_member_id = #{groupMemberId,jdbcType=NVARCHAR}
     </update>
+
+    <!-- 根据群组编号和群成员编号删除群成员信息 -->
+    <delete id="deleteGroupMember" parameterType="java.lang.String" >
+        delete from ab_member_and_group_tab  where
+            group_member_id=(
+            select
+              group_member_id
+            from
+              ab_group_member_tab
+            where
+              mebile  = #{mobile,jdbcType=NVARCHAR}
+        )
+        and group_id = #{groupId,jdbcType=NVARCHAR}
+    </delete>
 </mapper>

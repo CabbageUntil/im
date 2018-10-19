@@ -29,6 +29,7 @@
         <result property="groupId" column="group_id" />
         <result property="groupName" column="group_name" />
         <result property="memberRole" column="member_role" />
+        <result property="groupMemberId" column="group_member_id" />
     </resultMap>
     <sql id="Base_Column_List" >
         group_id,name,status,create_date,remove_date,group_creator
@@ -45,7 +46,7 @@
 
     <!-- 登录群组是获取群成员的信息 包含：群名称，姓名，角色-->
     <select id="selectGroupMemberByMebileAndGroupId" resultMap="GroupMemberInfo" parameterType="java.lang.String">
-        select a.name member_name,c.name group_name,c.group_id group_id,
+        select a.name member_name,a.group_member_id group_member_id,c.name group_name,c.group_id group_id,
          b.member_role member_role
          from ab_group_member_tab a
             inner join  ab_member_and_group_tab b
@@ -73,7 +74,7 @@
         ab_member_and_group_tab b
         LEFT JOIN ab_group_member_tab c ON b.group_member_id = c.group_member_id
         WHERE
-        b.member_role  &lt;&gt; 0
+        b.member_role  = 1
         and mebile = #{aa,jdbcType=NVARCHAR}
         )
     </select>
@@ -127,7 +128,7 @@
         and
             a.status  = 1
         and
-            b.member_role  &lt;&gt;  0
+            b.member_role  = 1
     </select>
 
     <!-- 查询创建的群组的数量-->
@@ -145,10 +146,12 @@
                 b.member_role  = 2
     </select>
 
+    <!--根据群组编号删除群组信息-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from ab_group_tab
         where group_id = #{groupId,jdbcType=NVARCHAR}
     </delete>
+
     <!--添加群组信息(所有字段添加  没有值可能会默认null)-->
     <insert id="insert" parameterType="com.csxx.dao.webOrg.AbGroup" >
     insert into ab_group_tab (

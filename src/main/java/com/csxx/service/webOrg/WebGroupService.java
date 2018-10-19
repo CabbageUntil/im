@@ -58,6 +58,23 @@ public interface WebGroupService {
      * @return
      */
     int deleteGroupMember(UserInfo userInfo,String groupMemberId);
+
+    /**
+     * 群成员退群
+     * @param userInfo
+     * @param groupId
+     * @return
+     */
+    int leaveGroup(UserInfo userInfo,String groupId);
+
+    /**
+     * 解散群组
+     * @param userInfo
+     * @param groupId
+     * @return
+     */
+    int removeGroup(UserInfo userInfo,String groupId);
+
     /**
      * 获取加入的群组的数量
      * @param userInfo
