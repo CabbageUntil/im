@@ -239,8 +239,13 @@ public class WebGroupController {
                                     @RequestParam("name") String name, @RequestParam("mobile") String mobile ){
         UserInfo userInfo = getUserInfo(session);
         if (userInfo != null) {
-            webGroupService.addGroupMember(userInfo,name,mobile);
-            return ResponseEntityUtil.success();
+            System.out.println("添加群成员信息！");
+            if(name!=null && mobile!=null&&name!="null"&&mobile!="null"&&name!=""&&mobile!=""){
+                webGroupService.addGroupMember(userInfo,name,mobile);
+                return ResponseEntityUtil.success();
+            } else {
+                return ResponseEntityUtil.error(101010,"姓名和手机号不能为空");
+            }
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
         }

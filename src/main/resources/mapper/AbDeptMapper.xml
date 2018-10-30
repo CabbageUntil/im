@@ -20,7 +20,6 @@
     <result property="deptRemoveDatetime" column="dept_remove_datetime" />
     <result property="deptCreateDatetime" column="dept_create_datetime" />
     <result property="deptStatus" column="dept_status" />
-     <!--2018年7月31日11:54:51 parent_name-->
     <result property="parentName" column="parent_name" />
   </resultMap>
   <resultMap id="selectList" type="com.csxx.utils.deptList">
@@ -121,10 +120,17 @@
   <!--2018年7月30日11:00:20 -->
   <select id="selectByNameAndStatus" resultMap="AllMemberMap" >
     SELECT
-    tb.dept_name parent_name,ab.dept_id, ab.org_id, ab.dept_name, ab.parent_id,ab.dept_remove_datetime,ab.dept_status,ab.dept_create_datetime
-    from ab_dept_tab tb
-    INNER JOIN ab_dept_tab ab
-    ON tb.dept_id = ab.parent_id
+    ab.dept_name,
+    tb.dept_name parent_name,
+    ab.dept_id,
+    ab.org_id,
+    ab.parent_id,
+    ab.dept_remove_datetime,
+    ab.dept_status,
+    ab.dept_create_datetime
+    from ab_dept_tab ab
+    LEFT  JOIN ab_dept_tab tb
+    ON ab.parent_id = tb.dept_id
     where
     ab.org_id = #{orgId,jdbcType=INTEGER}
     and  ab.dept_status =  #{status,jdbcType=INTEGER}
@@ -137,10 +143,17 @@
   <!--2018年9月17日16:21:38-->
   <select id="selectByNameAndOrgId" resultMap="AllMemberMap" >
     SELECT
-    tb.dept_name parent_name,ab.dept_id, ab.org_id, ab.dept_name, ab.parent_id,ab.dept_remove_datetime,ab.dept_status,ab.dept_create_datetime
-    from ab_dept_tab tb
-    INNER JOIN ab_dept_tab ab
-    ON tb.dept_id = ab.parent_id
+    ab.dept_name,
+    tb.dept_name parent_name,
+    ab.dept_id,
+    ab.org_id,
+    ab.parent_id,
+    ab.dept_remove_datetime,
+    ab.dept_status,
+    ab.dept_create_datetime
+    from ab_dept_tab ab
+    LEFT  JOIN ab_dept_tab tb
+    ON ab.parent_id = tb.dept_id
     where
     ab.org_id = #{orgId,jdbcType=INTEGER}
     <if test="deptName!=null and  deptName!=''">

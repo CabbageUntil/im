@@ -1,9 +1,11 @@
 package com.csxx.service.webOrg;
 
+import com.csxx.utils.PhoneParentList;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.UserInfo;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public interface WebUserService {
 
@@ -35,5 +37,12 @@ public interface WebUserService {
     ResponseEntity loginGroup(HttpSession session, UserInfo userInfo, String groupId);
 
     void logoutCom(HttpSession session, UserInfo userInfo);
+
+    /**
+     * 查询电话号码
+     * @param userInfo
+     * @return
+     */
+    List<PhoneParentList> findTellList(UserInfo userInfo);
 
 }

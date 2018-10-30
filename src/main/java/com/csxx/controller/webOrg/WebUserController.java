@@ -2,6 +2,7 @@ package com.csxx.controller.webOrg;
 
 import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.UserInfoEnum;
+import com.csxx.service.unifiedLogin.UnifiedLoginService;
 import com.csxx.service.webOrg.WebCompanyService;
 import com.csxx.service.webOrg.WebUserService;
 import com.csxx.utils.ResponseEntityUtil;
@@ -82,7 +83,16 @@ public class WebUserController {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN.getCode(), "需要登录");
         }
     }
-
+    @PostMapping("/findPhoneList")
+    public ResponseEntity getPhoneList(HttpSession session){
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
+        if (userInfo != null) {
+           //return null;
+            return ResponseEntityUtil.success(webUserService.findTellList(userInfo));
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN.getCode(), "需要登录");
+        }
+    }
     @PostMapping("/logout")
     public ResponseEntity logout(HttpSession session) {
         session.removeAttribute(UserInfoEnum.USERINFO);

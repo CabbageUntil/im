@@ -1,29 +1,43 @@
 package com.csxx.service.webOrg.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.csxx.bo.phoneList.ValidPhoneListData;
+import com.csxx.bo.phoneList.ValidPhoneListEntity;
 import com.csxx.bo.unifiedLogin.ValidResponseEntity;
-import com.csxx.dao.webOrg.AbGroupMember;
 import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.MemberStatusEnum;
 import com.csxx.enums.webOrg.UserInfoEnum;
 import com.csxx.mapper.webOrg.AbGroupMapper;
-import com.csxx.mapper.webOrg.AbMemberGroupMapper;
 import com.csxx.mapper.webOrg.AbMemberMapper;
 import com.csxx.service.unifiedLogin.UnifiedLoginService;
 import com.csxx.service.webOrg.WebUserService;
+import com.csxx.utils.MD5Util;
+import com.csxx.utils.PhoneChildList;
+import com.csxx.utils.PhoneParentList;
 import com.csxx.utils.ResponseEntityUtil;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.GroupMemberInfo;
 import com.csxx.vo.webOrg.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
 public class WebUserServiceImpl implements WebUserService {
 
+    @Autowired
+    private RestTemplate restTemplate;
     private final UnifiedLoginService unifiedLoginService;
     private final AbMemberMapper abMemberMapper;
     @Autowired
@@ -120,5 +134,45 @@ public class WebUserServiceImpl implements WebUserService {
         userInfo.setMemberName(null);
         userInfo.setRole("visitor");
         session.setAttribute(UserInfoEnum.USERINFO, userInfo);
+    }
+    /**
+     * 调用统一接口访问电话本数据
+     *
+     */
+    @Override
+    public List<PhoneParentList> findTellList(UserInfo userInfo){
+        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+        //获取用户注册账号
+        String owner = userInfo.getUsername();
+        postParameters.add("owner",owner);
+        postParameters.add("secret", MD5Util.getMD5(owner+"D8FIs5mz9spSTF7R"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(postParameters, headers);
+
+        String data = restTemplate.postForObject("http://onenet.com.tw:8088/im/contacts/api/get_user",
+                request, String.class);
+        //json对象转成
+        ValidPhoneListEntity validPhoneListEntity = new ValidPhoneListEntity();
+        ValidPhoneListEntity aa = JSONObject.parseObject(data,ValidPhoneListEntity.class);
+        List<ValidPhoneListData> d = aa.getData();
+        List<PhoneParentList> pLists = new ArrayList<>();
+        for (ValidPhoneListData val : d){
+            PhoneParentList phoneParentList =  new PhoneParentList();
+            String name = val.getPrettyName();
+            String[] phone = val.getPhoneList();
+            List<PhoneChildList> cList = new ArrayList<>();
+            for(int i = 0; i <phone.length; i++){
+                PhoneChildList phoneChildList = new PhoneChildList();
+                phoneChildList.setLabel(phone[i]);
+                phoneChildList.setValue(phone[i]);
+                cList.add(phoneChildList);
+            }
+            phoneParentList.setChildren(cList);
+            phoneParentList.setLabel(name);
+            phoneParentList.setValue(name);
+            pLists.add(phoneParentList);
+        }
+        return  pLists;
     }
 }

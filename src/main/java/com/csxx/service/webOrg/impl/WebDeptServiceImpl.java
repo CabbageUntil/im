@@ -96,13 +96,6 @@ public class WebDeptServiceImpl implements WebDeptmentServic {
     @Override
     @Transactional
     public ResponseEntity apartmentList(String sort, Integer page, Integer per_page, UserInfo userInfo, String filter,Integer type) {
-        // 校验是否有权查询
-        AbMember abMember = abMemberMapper.selectByPrimaryKey(userInfo.getMemberId());
-        if (!abMember.getRoleId().equals(RoleEnum.CREATOR.getCode())) {
-            return ResponseEntityUtil.error(ResultEnum.NO_PERMISSION.getCode(), "非创建者无权查询");
-        } else if (abMember.getMemberStatus().intValue() != MemberStatusEnum.FORMAL.getCode()) {
-            return ResponseEntityUtil.error(ResultEnum.NO_PERMISSION.getCode(), "非正式员工无权查询");
-        }
         String sortPeridcate;
         TableDTO<AbDept> tableDTO;
         if(StringUtils.isBlank(sort)){

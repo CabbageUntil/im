@@ -32,6 +32,7 @@ public class UnifiedLoginServiceImpl implements UnifiedLoginService {
     @Autowired
     private TelOwnerListRepository telOwnerListRepository;
 
+
     /**
      * 调用外部统一登录API
      * @param jwtToken JWT-TOKEN令牌字符串
@@ -44,7 +45,8 @@ public class UnifiedLoginServiceImpl implements UnifiedLoginService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         postParameters.add("sign", MD5Util.getMD5(unifiedLoginConfig.getRequestTokenSign().concat(dateFormat.format(new Date()))).toLowerCase());
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        headers.add("Content-Type",
+                "application/x-www-form-urlencoded");
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(postParameters, headers);
         String data = restTemplate.postForObject(unifiedLoginConfig.getTokenValidPage(), request, String.class);
 
@@ -58,6 +60,7 @@ public class UnifiedLoginServiceImpl implements UnifiedLoginService {
         Gson gson = builder.create();
         ValidResponseEntity responseEntity = gson.fromJson(data, ValidResponseEntity.class);
         if (responseEntity.getIsOk() == 1) {
+            //保存用户手机号码
             initUser(responseEntity.getData().getMobile());
         }
         return responseEntity;
@@ -77,4 +80,6 @@ public class UnifiedLoginServiceImpl implements UnifiedLoginService {
             telOwnerListRepository.save(telOwnerList);
         }
     }
+
+
 }
