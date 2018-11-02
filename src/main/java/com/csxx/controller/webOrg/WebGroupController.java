@@ -5,6 +5,7 @@ import com.csxx.enums.common.ResultEnum;
 import com.csxx.enums.webOrg.UserInfoEnum;
 import com.csxx.service.webOrg.WebGroupService;
 import com.csxx.utils.ResponseEntityUtil;
+import com.csxx.utils.ValidPhoneUtils;
 import com.csxx.utils.groupList;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.UserInfo;
@@ -132,6 +133,26 @@ public class WebGroupController {
         }
     }
     /**
+     * 不通过审核群成员信息
+     * @param session
+     * @param groupMemberId
+     * @return
+     */
+    @PostMapping("/verifyGroupMember2")
+    public ResponseEntity verifyGroupMember2(HttpSession session,
+                                            @RequestParam("groupMemberId") String groupMemberId){
+        UserInfo userInfo = getUserInfo(session);
+        if (userInfo != null) {
+           if(webGroupService.verifyGroupMember2(userInfo,groupMemberId)>0){
+              return  ResponseEntityUtil.success();
+           }else{
+             return  ResponseEntityUtil.error(1144,"网络异常操作失败！");
+           }
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);
+        }
+    }
+    /**
      * 移除群组成员
      * @param session
      * @param groupMemberId
@@ -241,10 +262,15 @@ public class WebGroupController {
         if (userInfo != null) {
             System.out.println("添加群成员信息！");
             if(name!=null && mobile!=null&&name!="null"&&mobile!="null"&&name!=""&&mobile!=""){
-                webGroupService.addGroupMember(userInfo,name,mobile);
-                return ResponseEntityUtil.success();
+                //检测号码是否
+                if(ValidPhoneUtils.validPhoneNum("0",mobile)){
+                    webGroupService.addGroupMember(userInfo,name,mobile);
+                    return ResponseEntityUtil.success();
+                } else {
+                    return ResponseEntityUtil.error(11120,"请输入正确的手机号码！");
+                }
             } else {
-                return ResponseEntityUtil.error(101010,"姓名和手机号不能为空");
+                return ResponseEntityUtil.error(11110,"姓名和手机号不能为空！");
             }
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN);

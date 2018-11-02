@@ -222,6 +222,17 @@ public class WebGroupServiceImpl implements WebGroupService {
         return abGroupAndMemberMapper.verifyGroupMember(abGroupAndMember);
     }
     /**
+     * 不通过审核
+     * @param userInfo
+     * @param groupMemberId
+     * @return
+     */
+    @Override
+    @Transactional
+    public int verifyGroupMember2(UserInfo userInfo, String groupMemberId) {
+        return abGroupAndMemberMapper.deleteByMemberIdAndGroupId(groupMemberId,userInfo.getGroupId());
+    }
+    /**
      * 删除群组成员信息(群组长)
      * @param userInfo
      * @param groupMemberId

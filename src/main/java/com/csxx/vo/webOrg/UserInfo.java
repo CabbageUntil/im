@@ -29,6 +29,8 @@ public class UserInfo {
 
     private String groupId;//群组编号
     private String groupMemberId;//登录群的成员编号(判断是不是群主)
+    //加密
+    private String secret;
 
     //登录状态
 

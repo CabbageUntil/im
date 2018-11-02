@@ -41,4 +41,12 @@ public interface AbGroupAndMemberMapper {
 
     int deleteByMemberIdAndGroupId(@Param(value="memberId") String memberId,@Param(value="groupId") String groupId);
 
+    /**
+     * 删除对应的关系
+     * @param memberId
+     * @param groupId
+     * @return
+     */
+    int deleteByMemberIdAndGroupId1(@Param(value="memberId") String memberId,@Param(value="groupId") String groupId);
+
 }

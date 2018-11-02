@@ -1,6 +1,9 @@
 package com.csxx.service.webOrg;
 
+import com.csxx.bo.phoneList.ValidPhoneListEntity;
+import com.csxx.utils.NameList;
 import com.csxx.utils.PhoneParentList;
+import com.csxx.utils.TelList;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.UserInfo;
 
@@ -44,5 +47,19 @@ public interface WebUserService {
      * @return
      */
     List<PhoneParentList> findTellList(UserInfo userInfo);
+
+
+    List<TelList> getTelList(UserInfo userInfo);
+
+
+    List<NameList> getNameList(UserInfo userInfo);
+
+    /**
+     * 向电话通讯录添加数据
+     * @param userInfo
+     * @return
+     */
+    ValidPhoneListEntity addPhoneList(UserInfo userInfo,String name,String mobile);
+
 
 }

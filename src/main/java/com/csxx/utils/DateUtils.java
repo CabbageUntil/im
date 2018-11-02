@@ -68,13 +68,6 @@ public class DateUtils {
         date.setTime(t);
         return date;
     }
-    public static void main(String args[]){
-
-        System.out.println(getDateFormat("2018-08-05T16:00:00.000Z")
-
-        );
-    }
-
     /**
      * 2018-08-05T16:00:00.000Z
      * @param create_time
@@ -83,11 +76,11 @@ public class DateUtils {
     public static Date getDateFormat(String create_time){
         Date d = new Date();
         if (create_time != null && create_time != "NULL" && create_time != "") {
-                //转换日期格式(将Mon Jun 18 2018 00:00:00 GMT+0800 (中国标准时间) 转换成yyyy-MM-dd)
+                //转换日期格式
                 create_time = create_time.replace("Z", " UTC");
                 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
             try {
-                return sdf1.parse(create_time);//Mon Mar 06 00:00:00 CST 2017
+                return sdf1.parse(create_time);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

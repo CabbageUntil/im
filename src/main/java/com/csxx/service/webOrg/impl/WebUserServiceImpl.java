@@ -1,6 +1,5 @@
 package com.csxx.service.webOrg.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.csxx.bo.phoneList.ValidPhoneListData;
 import com.csxx.bo.phoneList.ValidPhoneListEntity;
@@ -12,10 +11,7 @@ import com.csxx.mapper.webOrg.AbGroupMapper;
 import com.csxx.mapper.webOrg.AbMemberMapper;
 import com.csxx.service.unifiedLogin.UnifiedLoginService;
 import com.csxx.service.webOrg.WebUserService;
-import com.csxx.utils.MD5Util;
-import com.csxx.utils.PhoneChildList;
-import com.csxx.utils.PhoneParentList;
-import com.csxx.utils.ResponseEntityUtil;
+import com.csxx.utils.*;
 import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.GroupMemberInfo;
 import com.csxx.vo.webOrg.UserInfo;
@@ -55,6 +51,8 @@ public class WebUserServiceImpl implements WebUserService {
         } else {
             UserInfo userInfo = new UserInfo();
             userInfo.setUsername(responseEntity.getData().getMobile());
+            String s = responseEntity.getData().getMobile();
+            userInfo.setSecret(MD5Util.getMD5(s+"D8FIs5mz9spSTF7R"));
             userInfo.setRole("visitor");
             userInfo.setToken(responseEntity.getData().getToken());
             userInfo.setName(responseEntity.getData().getNickname());
@@ -153,26 +151,151 @@ public class WebUserServiceImpl implements WebUserService {
         String data = restTemplate.postForObject("http://onenet.com.tw:8088/im/contacts/api/get_user",
                 request, String.class);
         //json对象转成
-        ValidPhoneListEntity validPhoneListEntity = new ValidPhoneListEntity();
         ValidPhoneListEntity aa = JSONObject.parseObject(data,ValidPhoneListEntity.class);
-        List<ValidPhoneListData> d = aa.getData();
-        List<PhoneParentList> pLists = new ArrayList<>();
-        for (ValidPhoneListData val : d){
-            PhoneParentList phoneParentList =  new PhoneParentList();
-            String name = val.getPrettyName();
-            String[] phone = val.getPhoneList();
-            List<PhoneChildList> cList = new ArrayList<>();
-            for(int i = 0; i <phone.length; i++){
-                PhoneChildList phoneChildList = new PhoneChildList();
-                phoneChildList.setLabel(phone[i]);
-                phoneChildList.setValue(phone[i]);
-                cList.add(phoneChildList);
+        if(aa!=null&&!"".equals(aa)){
+            List<ValidPhoneListData> d = aa.getData();
+            if(d!=null&&!"".equals(d)){
+                List<PhoneParentList> pLists = new ArrayList<>();
+                for (ValidPhoneListData val : d){
+                    PhoneParentList phoneParentList =  new PhoneParentList();
+                    String name = val.getPrettyName();
+                    String[] phone = val.getPhoneList();
+                    List<PhoneChildList> cList = new ArrayList<>();
+                    for(int i = 0; i <phone.length; i++){
+                        PhoneChildList phoneChildList = new PhoneChildList();
+                        phoneChildList.setLabel(phone[i]);
+                        phoneChildList.setValue(phone[i]);
+                        cList.add(phoneChildList);
+                    }
+                    phoneParentList.setChildren(cList);
+                    phoneParentList.setLabel(name);
+                    phoneParentList.setValue(name);
+                    pLists.add(phoneParentList);
+                }
+                return  pLists;
+            } else {
+                return null;
             }
-            phoneParentList.setChildren(cList);
-            phoneParentList.setLabel(name);
-            phoneParentList.setValue(name);
-            pLists.add(phoneParentList);
         }
-        return  pLists;
+        return null;
+    }
+
+    /**
+     * 根据号码查询通讯录
+     * @param userInfo
+     * @return
+     */
+    @Override
+    public List<TelList> getTelList(UserInfo userInfo) {
+        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+        //获取用户注册账号
+        String owner = userInfo.getUsername();
+        System.out.println("手机号-------------------------------------------------------->"+owner);
+        postParameters.add("owner",owner);
+        postParameters.add("secret", MD5Util.getMD5(owner+"D8FIs5mz9spSTF7R"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(postParameters, headers);
+
+        String data = restTemplate.postForObject("http://onenet.com.tw:8088/im/contacts/api/get_user",
+                request, String.class);
+        //json对象转成
+        ValidPhoneListEntity aa = JSONObject.parseObject(data,ValidPhoneListEntity.class);
+        if(aa!=null&&!"".equals(aa)){
+            List<ValidPhoneListData> d = aa.getData();
+            //接收对象
+            if(d!=null&&!"".equals(d)){
+                List<TelList> telLists = new ArrayList<>();
+                for (ValidPhoneListData val : d){
+                    String name = val.getPrettyName();
+                    String[] name1 = name.split(" ");
+                    StringBuffer sb = new StringBuffer();
+                    sb.append(name1[1]).append(name1[0]);
+                    String userName = sb.toString();
+                    String[] phone = val.getPhoneList();
+                    //遍历电话号码
+                    for(int i = 0;i<phone.length;i++){
+                        TelList telList  =  new TelList();
+                        telList.setValue(phone[i]);
+                        telList.setName(userName);
+                        telLists.add(telList);
+                    }
+                }
+                return telLists;
+            } else {
+                return null;
+            }
+        }
+        return null;
+    }
+    /**
+     * 根据姓名查询通讯录
+     * @param userInfo
+     * @return
+     */
+    @Override
+    public List<NameList> getNameList(UserInfo userInfo) {
+        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+        //获取用户注册账号
+        String owner = userInfo.getUsername();
+        System.out.println("手机号-------------------------------------------------------->"+owner);
+        postParameters.add("owner",owner);
+        postParameters.add("secret", MD5Util.getMD5(owner+"D8FIs5mz9spSTF7R"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(postParameters, headers);
+
+        String data = restTemplate.postForObject("http://onenet.com.tw:8088/im/contacts/api/get_user",
+                request, String.class);
+        //json对象转成
+        ValidPhoneListEntity aa = JSONObject.parseObject(data,ValidPhoneListEntity.class);
+        if(aa!=null&&!"".equals(aa)){
+            List<ValidPhoneListData> d = aa.getData();
+            //接收对象
+            if (d != null && !"".equals(d)) {
+                List<NameList> nameLists = new ArrayList<>();
+                for (ValidPhoneListData val : d){
+                    NameList nameList = new NameList();
+                    String name = val.getPrettyName();
+                    String[] name1 = name.split(" ");
+                    StringBuffer sb = new StringBuffer();
+                    sb.append(name1[1]).append(name1[0]);
+                    String userName = sb.toString();
+                    nameList.setPhone(val.getPhoneList());
+                    nameList.setValue(userName);
+                    nameLists.add(nameList);
+                }
+                return nameLists;
+            }else {
+                return null;
+            }
+
+        }
+        return null;
+    }
+    /**
+     * 远程调用接口添加电话星系
+     * @param userInfo
+     * @return
+     */
+    @Override
+    public ValidPhoneListEntity addPhoneList(UserInfo userInfo,String name,String mobile) {
+        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+        //获取用户注册账号
+        String owner = userInfo.getUsername();
+        System.out.println("手机号-------------------------------------------------------->"+owner);
+        postParameters.add("owner",owner);
+        postParameters.add("name",name);
+        postParameters.add("mobile",mobile);
+        postParameters.add("secret", MD5Util.getMD5(owner+"D8FIs5mz9spSTF7R"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(postParameters, headers);
+
+        String data = restTemplate.postForObject("http://onenet.com.tw:8088/im/contacts/api/add_mobile",
+                request, String.class);
+        //json对象转成
+        ValidPhoneListEntity aa = JSONObject.parseObject(data,ValidPhoneListEntity.class);
+        return aa;
     }
 }

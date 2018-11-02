@@ -10,10 +10,7 @@ import com.csxx.vo.common.ResponseEntity;
 import com.csxx.vo.webOrg.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,6 +86,54 @@ public class WebUserController {
         if (userInfo != null) {
            //return null;
             return ResponseEntityUtil.success(webUserService.findTellList(userInfo));
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN.getCode(), "需要登录");
+        }
+    }
+
+    /**
+     * 根据电话号码查询通讯录
+     * @param session
+     * @return
+     */
+    @PostMapping("/getTelList")
+    public ResponseEntity getTeList(HttpSession session){
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
+        if (userInfo != null) {
+            return ResponseEntityUtil.success(webUserService.getTelList(userInfo));
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN.getCode(), "需要登录");
+        }
+    }
+    /**
+     * 根据姓名号码查询通讯录
+     * @param session
+     * @return
+     */
+    @PostMapping("/getNameList")
+    public ResponseEntity getNameList(HttpSession session){
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
+        if (userInfo != null) {
+            return ResponseEntityUtil.success(webUserService.getNameList(userInfo));
+        } else {
+            return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN.getCode(), "需要登录");
+        }
+    }
+
+    /**
+     * 向电话通讯录中添加电话和姓名
+     * @param session
+     * @param name
+     * @param mobile
+     * @return
+     */
+    @PostMapping("/addPhoneList")
+    public ResponseEntity addPhoneList(HttpSession session,
+                                       @RequestParam("name") String name,
+                                       @RequestParam("mobile") String mobile){
+        UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoEnum.USERINFO);
+        if (userInfo != null) {
+            return ResponseEntityUtil.success(webUserService.addPhoneList(userInfo,name,mobile));
         } else {
             return ResponseEntityUtil.error(ResultEnum.NEED_LOGIN.getCode(), "需要登录");
         }

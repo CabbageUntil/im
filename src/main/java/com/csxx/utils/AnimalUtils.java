@@ -43,9 +43,5 @@ public class AnimalUtils {
         }
         return null;
     }
-    public static void main(String args[]) {
-        DateUtils dateUtils = new DateUtils();
-        System.out.println("当前时间"+ formateDate(new Date()));
-        getAnimal(formateDate(new Date()));
-    }
+
 }

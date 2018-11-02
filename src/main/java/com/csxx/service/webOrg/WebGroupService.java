@@ -50,6 +50,13 @@ public interface WebGroupService {
      * @return
      */
     int verifyGroupMember(UserInfo userInfo,String groupMemberId);
+    /**
+     * 不通过审核
+     * @param userInfo
+     * @param groupMemberId
+     * @return
+     */
+    int verifyGroupMember2(UserInfo userInfo,String groupMemberId);
 
     /**
      * 移除群组成员
